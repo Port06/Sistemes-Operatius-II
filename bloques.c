@@ -3,6 +3,7 @@
 #include "bloques.h"
 
 const int BLOCKSIZE = 1024;
+static int descriptor = 0;
 
 
 //Se crea el fichero
