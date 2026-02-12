@@ -2,11 +2,8 @@
 
 int blockSize = 1024;
 
-
-int bmount(const char *camino) {};
-
 //Se crea el fichero
-int bumount() {
+int int bmount(const char *camino); {
 	
 	int open(const char *camino, int O_RDWR, mode_t mode);
 	
@@ -15,6 +12,8 @@ int bumount() {
 	}
 
 };
+
+int bumount();
 
 int bwrite(unsigned int nbloque, const void *buf) {};
 
