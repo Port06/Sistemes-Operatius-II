@@ -9,6 +9,11 @@ int bmount(const char *camino) {};
 int bumount() {
 	
 	int open(const char *camino, int O_RDWR, mode_t mode);
+	
+	if (descriptor == -1) {
+…  		//Error al crear el fichero con la funcion open
+	}
+
 };
 
 int bwrite(unsigned int nbloque, const void *buf) {};
