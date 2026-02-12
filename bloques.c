@@ -1,5 +1,7 @@
 //Archivo bloques.c
 
+#include "bloques.h"
+
 int blockSize = 1024;
 
 //Se crea el fichero
