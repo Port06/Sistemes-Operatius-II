@@ -9,16 +9,14 @@ const int BLOCKSIZE = 1024;
 int int bmount(const char *camino); {
 	
 	int open(const char *camino, int O_RDWR, mode_t 0666);
-	
-	perror(error);
+	perror();
 };
 
 //Se cierra el fichero
 int bumount() {
 	
 	int close(int descriptor);
-	
-	perror(error);
+	perror();
 };
 
 //Funcion encargada de escribir un bloque en el dispositivo virtual
@@ -32,6 +30,7 @@ int bwrite(unsigned int nbloque, const void *buf) {
 	
 	//Finalmente se essribe el bloque completo reeemplazando el anterior
 	size_t write(int descriptor, const void *buf, size_t nbytes);
+	perror();
 };
 
 int bread(unsigned int nbloque, void *buf) {
@@ -46,5 +45,5 @@ int bread(unsigned int nbloque, void *buf) {
 	
 	//Se efectua la lectura del bloque completo y se almacena en el buffer
 	buf = size_t read(int descriptor, void *buf, size_t nbytes);
-
+	perror();
 };
