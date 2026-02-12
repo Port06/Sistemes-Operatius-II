@@ -5,15 +5,15 @@ int blockSize = 1024;
 //Se crea el fichero
 int int bmount(const char *camino); {
 	
-	int open(const char *camino, int O_RDWR, mode_t mode);
+	int open(const char *camino, int O_RDWR, mode_t 0666);
 	
-	if (descriptor == -1) {
-…  		//Error al crear el fichero con la funcion open
-	}
-
+	perror(error);
 };
 
-int bumount();
+int bumount() {
+	
+	close();
+};
 
 int bwrite(unsigned int nbloque, const void *buf) {};
 
