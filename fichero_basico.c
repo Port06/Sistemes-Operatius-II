@@ -4,7 +4,22 @@
 #include "fichero_basico.h"
 #include <time.h>
 
-int initMB();
+
+//Metodo que inizializa el mapa de bits
+int initMB() {
+	unsigned int bloquesMetadatos;
+	bloquesMetadatos = tamSB + tamMB + tamAI;
+	
+	unsigned int bitsMetadatos;
+	unsigned int bytesCompletos;
+	unsigned int bitsResto;
+
+	bitsMetadatos = bloquesMetadatos;     //Cada bloque es igual a 1 bit
+
+	bytesCompletos = bitsMetadatos / 8;   //Los bytes completos a 11111111
+	bitsResto = bitsMetadatos % 8;   //Los bits sueltos del siguiente byte
+		
+};
 int initAI();
 int initSB(unsigned int nbloques, unsigned int ninodos);
 
@@ -33,6 +48,7 @@ int tamAI(unsigned int ninodos) {
 	
 };
 
+//Metodo que iniziliza el superbloque
 int initSB(unsigned int nbloques, unsigned int ninodos) {
 	struct superbloque SB;
 
@@ -49,6 +65,7 @@ int initSB(unsigned int nbloques, unsigned int ninodos) {
 	SB.totBloques = nbloques;
 	SB.totinodos = ninodos
 
+	//Se comprueba que se haya escrito bien el superbloque
 	if (bwrite(posSB, &SB) == FALLO) {
 		fprintf(stderr, RED "Error al escribir la estructura en SB\n" RESET);
 		return FALLO;
