@@ -4,8 +4,8 @@
 #include "fichero_basico.h"
 #include <time.h>
 
-tamMB()
-tamAI()
-initSB()
-initMB()
-initAI()
+int initMB();
+int initAI();
+int initSB(unsigned int nbloques, unsigned int ninodos);
+int tamMB(unsigned int nbloques);
+int tamAI(unsigned int ninodos);
