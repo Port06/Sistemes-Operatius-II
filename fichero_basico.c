@@ -5,7 +5,7 @@
 #include <time.h>
 
 int initMB();
-int initAI();
+
 int initSB(unsigned int nbloques, unsigned int ninodos);
 
 //Metodo para clacular el numero necessario de bloques
@@ -54,4 +54,38 @@ int initSB(unsigned int nbloques, unsigned int ninodos) {
 		return FALLO;
 	}
 
+}
+
+int initAI(){
+	struct superbloque SB;
+	if (bread(posSB, &SB) == FALLO) {
+		fprintf(stderr, RED "Error al leer la estructura en SB\n" RESET);
+		return FALLO;
+	}
+	struct inodo inodos [BLOCKSIZE/INODOSIZE]
+	int ContInodos = SB.posPrimerInodoLibre+1;
+	for(i=SB.posPrimerBloqueAI; i<=SB.posUltimoBloqueAI; i++){
+		if(bread(i, &inodos) == FALLO) {
+			fprintf(stderr, RED "Error al leer la estructura en AI\n" RESET);
+			return FALLO;
+		}
+		for(j=0; j<BLOCKSIZE/INODOSIZE; j++){
+			inosdos[j].tipo = 'l';
+			if(contInodos<SB.totinodos){
+				inodos[j].punterosDirectos[0] = ContInodos;
+				ContInodos++;
+			}else{
+				inodos[j].punterosDirectos[0] = UINT_MAX;
+				break;
+			}
+		
+		}
+		if(bwrite(i, &inodos) == FALLO) {
+			fprintf(stderr, RED "Error al escribir la estructura en AI\n" RESET);
+			return FALLO;
+		}
+	
+	
+}
+return EXITO;
 }
