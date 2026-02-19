@@ -13,7 +13,7 @@ int bmount(const char *camino) {
 	
 	//Manejo de errores al abrir el descriptor
 	if (descriptor == -1) {
-		perror();
+		fprintf(stderr, RED "Error al abrir el descriptor\n" RESET);
 		return FALLO;
 	}
 	return descriptor;
@@ -24,7 +24,7 @@ int bumount() {
 	
 	//Manejo e errores al cerrar el descriptor
 	if (close(descriptor) == -1) {
-		perror();
+		fprintf(stderr, RED "Error al cerrar el dispositivo\n" RESET);
 		return FALLO;
 	}
 	return EXITO;
@@ -38,7 +38,7 @@ int bwrite(unsigned int nbloque, const void *buf) {
 	
 	//Se mueve la posicion del puntero para que este bien posicionado
 	if (lseek(descriptor, desplazamiento, SEEK_SET) == -1) {
-        perror();
+        fprintf(stderr, RED "Error al escribir\n" RESET);
         return FALLO;
     }
 	
@@ -47,10 +47,10 @@ int bwrite(unsigned int nbloque, const void *buf) {
 	
 	//Verificamos que se hayan escrito los bytes correctos
 	if (bytes_escritos != BLOCKSIZE) {
-		fprintf(stderr, "Escritura incompleta\n");
+		fprintf(stderr, RED "Error al escribir\n" RESET);
 		return FALLO;
 	} else if (bytes_escritos == -1) {
-        perror();
+        fprintf(stderr, RED "Error al verificar\n" RESET);
         return FALLO;
     }
 	
@@ -63,7 +63,7 @@ int bread(unsigned int nbloque, void *buf) {
 	
 	//Se mueve la posicion del puntero para que este bien posicionado
 	if (lseek(descriptor, desplazamiento, SEEK_SET) == -1) {
-        perror();
+        fprintf(stderr, RED "Error al leer\n" RESET);
         return FALLO;
     }
 	
@@ -72,10 +72,10 @@ int bread(unsigned int nbloque, void *buf) {
 	
 	//Verificamos que se hayan leido los bytes correctos
 	if (bytes_leidos != BLOCKSIZE) {
-		fprintf(stderr, "Lectura incompleta\n");
+		fprintf(stderr, RED "Lectura incompleta\n" RESET);
 		return FALLO;
 	} else if (bytes_leidos == -1) {
-        perror();
+        fprintf(stderr, RED "Error al verificar\n" RESET);
         return FALLO;
     }
 	
