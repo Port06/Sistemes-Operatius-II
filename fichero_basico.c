@@ -5,7 +5,7 @@
 #include <time.h>
 
 int initMB();
-
+int initAI();
 int initSB(unsigned int nbloques, unsigned int ninodos);
 
 //Metodo para clacular el numero necessario de bloques
@@ -33,6 +33,7 @@ int tamAI(unsigned int ninodos) {
 	
 };
 
+//Metodo que iniziliza el superbloque
 int initSB(unsigned int nbloques, unsigned int ninodos) {
 	struct superbloque SB;
 
@@ -49,6 +50,7 @@ int initSB(unsigned int nbloques, unsigned int ninodos) {
 	SB.totBloques = nbloques;
 	SB.totinodos = ninodos
 
+	//Se comprueba que se haya escrito bien el superbloque
 	if (bwrite(posSB, &SB) == FALLO) {
 		fprintf(stderr, RED "Error al escribir la estructura en SB\n" RESET);
 		return FALLO;
