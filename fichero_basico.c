@@ -58,6 +58,7 @@ int initSB(unsigned int nbloques, unsigned int ninodos) {
 
 }
 
+//Metodo para inizializar los inodos libres
 int initAI(){
 	struct superbloque SB;
 	if (bread(posSB, &SB) == FALLO) {
