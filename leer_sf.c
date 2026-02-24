@@ -17,10 +17,7 @@ int main(int argc, char **argv){
         perror(RED "Error al leer el superbloque");
         return FALLO;
     }
-     if(leer_inodo(SB.posInodoRaiz, &inodoRaiz) == FALLO) {
-        perror(RED "Error al leer el inodo raíz");
-        return FALLO;
-    }
+
 
     printf("DATOS DEL SUPERBLOQUE\n");
     printf("posPrimerBloqueMB = %d\n", SB.posPrimerBloqueMB);

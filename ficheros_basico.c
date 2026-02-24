@@ -1,8 +1,9 @@
 //Archivo fichero_basico.c
 
 #include "bloques.h"
-#include "fichero_basico.h"
+#include "ficheros_basico.h"
 #include <time.h>
+#include <limits.h>
 
 
 //Metodo para clacular el numero necessario de bloques
@@ -32,9 +33,10 @@ int tamAI(unsigned int ninodos) {
 
 //Metodo que inizializa a los bits del los metadatos
 int initMB() {
+	struct superbloque SB;
 	
 	unsigned int bloquesMetadatos;
-	bloquesMetadatos = tamSB + tamMB + tamAI;
+	bloquesMetadatos = SB.posPrimerBloqueDatos;
 
 	unsigned int bitsMetadatos;
 	unsigned int bytesCompletos;
@@ -61,7 +63,7 @@ int initSB(unsigned int nbloques, unsigned int ninodos) {
 	SB.cantBloquesLibres = nbloques;
 	SB.cantInodosLibres = ninodos;
 	SB.totBloques = nbloques;
-	SB.totinodos = ninodos
+	SB.totInodos = ninodos;
 
 	//Se comprueba que se haya escrito bien el superbloque
 	if (bwrite(posSB, &SB) == FALLO) {
@@ -78,16 +80,16 @@ int initAI(){
 		fprintf(stderr, RED "Error al leer la estructura en SB\n" RESET);
 		return FALLO;
 	}
-	struct inodo inodos [BLOCKSIZE/INODOSIZE]
+	struct inodo inodos [BLOCKSIZE/INODOSIZE];
 	int ContInodos = SB.posPrimerInodoLibre+1;
-	for(i=SB.posPrimerBloqueAI; i<=SB.posUltimoBloqueAI; i++){
+	for(int i=SB.posPrimerBloqueAI; i<=SB.posUltimoBloqueAI; i++){
 		if(bread(i, &inodos) == FALLO) {
 			fprintf(stderr, RED "Error al leer la estructura en AI\n" RESET);
 			return FALLO;
 		}
-		for(j=0; j<BLOCKSIZE/INODOSIZE; j++){
-			inosdos[j].tipo = 'l';
-			if(contInodos<SB.totinodos){
+		for(int j=0; j<BLOCKSIZE/INODOSIZE; j++){
+			inodos[j].tipo = 'l';
+			if(ContInodos<SB.totInodos){
 				inodos[j].punterosDirectos[0] = ContInodos;
 				ContInodos++;
 			}else{
