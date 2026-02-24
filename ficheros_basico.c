@@ -29,23 +29,32 @@ int tamAI(unsigned int ninodos) {
 	//Luego de incrementa el numero de bolques en 1 si la division no es exacta
 	if (((ninodos / 8) % BLOCKSIZE) != 0) tamAI++;
 	
+	return tamAI;
 };
 
 //Metodo que inizializa a los bits del los metadatos
 int initMB() {
 	struct superbloque SB;
+	//Leemos el superbloque
+	if (bread(posSB, &SB) == FALLO) {
+		fprintf(stderr, RED "Error al leer la estructura en SB\n" RESET);
+		return FALLO;
+	}
 	
 	unsigned int bloquesMetadatos;
+	unsigned int bytesCompletos;
+	unsigned int bitsResto;
+	
 	bloquesMetadatos = SB.posPrimerBloqueDatos;
 
 	unsigned int bitsMetadatos;
-	unsigned int bytesCompletos;
-	unsigned int bitsResto;
 
 	bitsMetadatos = bloquesMetadatos;     //Cada bloque es 1 bit
 
 	bytesCompletos = bitsMetadatos / 8;   //Los bytes completos a 11111111
 	bitsResto      = bitsMetadatos % 8;   //Los bits sueltos del siguiente byte
+
+	return EXITO;
 }; 
 
 //Metodo que iniziliza el superbloque
@@ -71,6 +80,7 @@ int initSB(unsigned int nbloques, unsigned int ninodos) {
 		return FALLO;
 	}
 
+	return EXITO;
 }
 
 //Metodo para inizializar los inodos libres
@@ -80,6 +90,7 @@ int initAI(){
 		fprintf(stderr, RED "Error al leer la estructura en SB\n" RESET);
 		return FALLO;
 	}
+
 	struct inodo inodos [BLOCKSIZE/INODOSIZE];
 	int ContInodos = SB.posPrimerInodoLibre+1;
 	for(int i=SB.posPrimerBloqueAI; i<=SB.posUltimoBloqueAI; i++){

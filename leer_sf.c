@@ -2,7 +2,6 @@
 
 int main(int argc, char **argv){
     struct superbloque SB;
-    struct inodo inodoRaiz;
 
     char *nombreArchivo = argv[1];
 
