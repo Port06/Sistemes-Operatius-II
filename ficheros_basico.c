@@ -52,7 +52,7 @@ int initMB() {
 	bitsMetadatos = bloquesMetadatos;     //Cada bloque es 1 bit
 
 	bytesCompletos = bitsMetadatos / 8;   //Los bytes completos a 11111111
-	bitsResto      = bitsMetadatos % 8;   //Los bits sueltos del siguiente byte
+	bitsResto = bitsMetadatos % 8;   //Los bits sueltos del siguiente byte
 
 	return EXITO;
 }; 
@@ -117,4 +117,118 @@ int initAI(){
 	
 }
 return EXITO;
+}
+
+int escribir_bit(unsigned int nbloque, unsigned int bit){
+
+	struct superbloque SB;
+	if(bread(posSB, &SB) == FALLO) {
+		fprintf(stderr, RED "Error al leer la estructura en SB\n" RESET);
+		return FALLO;
+	}
+	int posbyteMB = nbloque / 8;
+	int posbit = nbloque % 8;
+
+	int nbloqueMB = posbyteMB / BLOCKSIZE;
+
+	int nbloqueabs = SB.posPrimerBloqueMB + nbloqueMB;
+
+	unsigned char bufferMB[BLOCKSIZE];
+
+	if (bread(SB.posPrimerBloqueMB + nbloqueMB, bufferMB) == FALLO) {
+		fprintf(stderr, RED "Error al leer la estructura en SB\n" RESET);
+		return FALLO;
+	}
+
+	int posbyte = posbyteMB % BLOCKSIZE;
+
+	unsiged char mascara = 128; //10000000
+	mascara >>= posbit; //Desplazamos la mascara a la derecha segun el numero de bit
+
+	if(bit == 1){
+		bufferMB[posbyte] |= mascara; //Pone a 1 el bit
+	}else{
+		bufferMB[posbyte] &= ~mascara; //Pone a 0 el bit
+	}
+
+	if (bwrite(SB.posPrimerBloqueMB + nbloqueMB, bufferMB) == -1) {
+		return FALLO;
+	}
+
+    return EXITO;
+	
+	
+}
+
+char leer_bit(unsiged int nbloque){
+	struct superbloque SB;
+	if(bread(posSB, &SB) == FALLO) {
+		fprintf(stderr, RED "Error al leer la estructura en SB\n" RESET);
+		return FALLO;
+	}
+
+	//Mismo tratamiento que en escribir_bit para calcular la posicion del byte y el bit dentro del bloque de metadatos
+	int posbyteMB = nbloque / 8;
+	int posbit = nbloque % 8;
+	int nbloqueMB = posbyteMB / BLOCKSIZE;
+	int nbloqueabs = SB.posPrimerBloqueMB + nbloqueMB;
+
+	//Volvemos a necesitar un buffer
+	unsigned char bufferMB[BLOCKSIZE];
+
+	//Tratamiento real del metodo de leer_bit,
+	if(bread(nbloqueabs, bufferMB) == FALLO) {
+		fprintf(stderr, RED "Error al leer la estructura en SB\n" RESET);
+		return FALLO;
+	}
+
+	unsigned char mascara = 128; // 10000000
+	mascara >>= posbit;          // desplazamiento de bits a la derecha, los que indique posbit
+	mascara &= bufferMB[posbyte]; // operador AND para bits
+	mascara >>= (7 - posbit);     // desplazamiento de bits a la derecha 
+                                // para dejar el 0 o 1 en el extremo derecho y leerlo en decimal
+	
+	return mascara;
+}
+
+int reservar_bloque() {
+	
+}
+
+int liberar_bloque(unsigned int nbloque) {
+	struct superbloque SB;
+	if(bread(posSB, &SB) == FALLO) {
+		fprintf(stderr, RED "Error al leer la estructura en SB\n" RESET);
+		return FALLO;
+	}
+
+	if(escribir_bit(nbloque, 0) == FALLO) {
+		fprintf(stderr, RED "Error al escribir el bit en liberar_bloque\n" RESET);
+		return FALLO;
+	}
+	
+	SB.cantBloquesLibres++;
+
+	if (bwrite(posSB, &SB) == FALLO) {
+		fprintf(stderr, RED "Error al escribir la estructura en SB\n" RESET);
+		return FALLO;
+	}
+
+	return nbloque;
+}
+
+int escribir_inodo(unsigned int ninodo, struct inodo *inodo) {
+	struct superbloque SB;
+	if(bread(posSB, &SB) == FALLO) {
+		fprintf(stderr, RED "Error al leer la estructura en SB\n" RESET);
+		return FALLO;
+	}
+}
+
+int leer_inodo(unsigned int ninodo, struct inodo *inodo) {
+	
+}
+
+int reservar_inodo(unsigned char tipo, unsigned char permisos) {
+	
 }
