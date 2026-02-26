@@ -1,4 +1,5 @@
 #include "ficheros_basico.h"
+#include <time.h>
 
 int main(int argc, char **argv){
     struct superbloque SB;
@@ -31,4 +32,25 @@ int main(int argc, char **argv){
     printf("cantInodosLibres = %d\n",SB.cantInodosLibres);
     printf("totBloques = %d\n", SB.totBloques);
     printf("totInodos = %d\n\n", SB.totInodos);
+
+struct tm *ts;
+char atime[80];
+char mtime[80];
+char ctime[80];
+char btime[80];
+
+
+struct inodo inodo;
+int ninodo;
+
+leer_inodo(ninodo, &inodo);
+ts = localtime(&inodo.atime);
+strftime(atime, sizeof(atime), "%a %Y-%m-%d %H:%M:%S", ts);
+ts = localtime(&inodo.mtime);
+strftime(mtime, sizeof(mtime), "%a %Y-%m-%d %H:%M:%S", ts);
+ts = localtime(&inodo.ctime);
+strftime(ctime, sizeof(ctime), "%a %Y-%m-%d %H:%M:%S", ts);
+ts = localtime(&inodo.btime);
+strftime(ctime, sizeof(btime), "%a %Y-%m-%d %H:%M:%S", ts);
+printf("ID: %d ATIME: %s MTIME: %s CTIME: %s BTIME: %s\\n",ninodo,atime,mtime,ctime, btime);
 }
