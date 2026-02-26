@@ -162,7 +162,7 @@ int escribir_bit(unsigned int nbloque, unsigned int bit){
 	
 }
 
-char leer_bit(unsiged int nbloque){
+char leer_bit(unsigned int nbloque){
 	struct superbloque SB;
 	if(bread(posSB, &SB) == FALLO) {
 		fprintf(stderr, RED "Error al leer la estructura en SB\n" RESET);
@@ -184,6 +184,7 @@ char leer_bit(unsiged int nbloque){
 		return FALLO;
 	}
 
+	int posbyte = posbyteMB % BLOCKSIZE;
 	unsigned char mascara = 128; // 10000000
 	mascara >>= posbit;// desplazamiento de bits a la derecha, los que indique posbit
 	mascara &= bufferMB[posbyte]; // operador AND para bits
@@ -393,7 +394,7 @@ int reservar_inodo(unsigned char tipo, unsigned char permisos) {
     inodo.atime = time(NULL);
     inodo.mtime = time(NULL);
     inodo.ctime = time(NULL);
-    inodo.bloquesOcupados = 0;
+    inodo.numBloquesOcupados = 0;
 
     //Inicializacion punteros directos
     for (int i = 0; i < 12; i++) {
