@@ -47,6 +47,13 @@ int main(int argc, char **argv) {
         return FALLO;
     }
 
+    //Reservamos el inodo del directorio raíz
+    if (reservar_inodo('d', 7) == FALLO) {
+        fprintf(stderr, RED "Error al reservar el inodo del directorio raíz\n" RESET);
+        bumount();
+        return FALLO;
+    }
+
     //Desmontamos el dispositivo virtual
     if (bumount() == FALLO) {
         return FALLO;

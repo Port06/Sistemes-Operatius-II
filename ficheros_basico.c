@@ -136,23 +136,25 @@ int escribir_bit(unsigned int nbloque, unsigned int bit){
 
 	unsigned char bufferMB[BLOCKSIZE];
 
+	//Leemos el bloque de metadotos donde se encuentra el bit que queremos modificar
 	if (bread(nbloqueabs, bufferMB) == FALLO) {
 		fprintf(stderr, RED "Error al leer la estructura en SB\n" RESET);
 		return FALLO;
 	}
 
+	//Calculamos la posicion del byte dentro del bloque de metadatos
 	int posbyte = posbyteMB % BLOCKSIZE;
-
-	unsiged char mascara = 128; //10000000
+	unsigned char mascara = 128; //10000000
 	mascara >>= posbit; //Desplazamos la mascara a la derecha segun el numero de bit
 
 	if(bit == 1){
-		bufferMB[posbyte] |= mascara; //Pone a 1 el bit
+		bufferMB[posbyte] |= mascara; //Pone a 1 el bit, con la operacion logica de OR
 	}else{
-		bufferMB[posbyte] &= ~mascara; //Pone a 0 el bit
+		bufferMB[posbyte] &= ~mascara; //Pone a 0 el bit, con la operacion logica de AND
 	}
 
-	if (bwrite(SB.posPrimerBloqueMB + nbloqueMB, bufferMB) == -1) {
+	//Escribimos el bloque de metadatos modificado
+	if (bwrite(nbloqueabs, bufferMB) == FALLO) {
 		return FALLO;
 	}
 
@@ -184,10 +186,10 @@ char leer_bit(unsiged int nbloque){
 	}
 
 	unsigned char mascara = 128; // 10000000
-	mascara >>= posbit;          // desplazamiento de bits a la derecha, los que indique posbit
+	mascara >>= posbit;// desplazamiento de bits a la derecha, los que indique posbit
 	mascara &= bufferMB[posbyte]; // operador AND para bits
-	mascara >>= (7 - posbit);     // desplazamiento de bits a la derecha 
-                                // para dejar el 0 o 1 en el extremo derecho y leerlo en decimal
+	mascara >>= (7 - posbit); // desplazamiento de bits a la derecha 
+    // para dejar el 0 o 1 en el extremo derecho y leerlo en decimal
 	
 	return mascara;
 }
@@ -197,19 +199,23 @@ int reservar_bloque() {
 }
 
 int liberar_bloque(unsigned int nbloque) {
+	//leemos el superbloque para obtener la posicion del bloque de metadatos
 	struct superbloque SB;
 	if(bread(posSB, &SB) == FALLO) {
 		fprintf(stderr, RED "Error al leer la estructura en SB\n" RESET);
 		return FALLO;
 	}
 
+	//Escribimos el bit del bloque que queremos liberar a 0
 	if(escribir_bit(nbloque, 0) == FALLO) {
 		fprintf(stderr, RED "Error al escribir el bit en liberar_bloque\n" RESET);
 		return FALLO;
 	}
 	
+	//Actualizamos la cantidad de bloques libres en el superbloque
 	SB.cantBloquesLibres++;
 
+	//Escribimos el superbloque actualizado
 	if (bwrite(posSB, &SB) == FALLO) {
 		fprintf(stderr, RED "Error al escribir la estructura en SB\n" RESET);
 		return FALLO;
@@ -273,5 +279,65 @@ int leer_inodo(unsigned int ninodo, struct inodo *inodo) {
 }
 
 int reservar_inodo(unsigned char tipo, unsigned char permisos) {
-	
+	//Leemos el superbloque
+	struct superbloque SB;
+	if(bread(posSB, &SB) == FALLO) {
+		fprintf(stderr, RED "Error al leer la estructura en SB\n" RESET);
+		return FALLO;
+	}
+
+	//Verificamos que haya inodos libres
+	if(SB.cantInodosLibres == 0) {
+		fprintf(stderr, RED "No hay inodos libres\n" RESET);
+		return FALLO;
+	}
+
+	//Obtenemos el primer inodo libre
+	unsigned int ninodo = SB.posPrimerInodoLibre;
+
+	//Leemos el inodo
+	struct inodo inodo;
+	if(leer_inodo(ninodo, &inodo) == FALLO) {
+		fprintf(stderr, RED "Error al leer el inodo\n" RESET);
+		return FALLO;
+	}
+
+	//Inicializamos el inodo
+	inodo.tipo = tipo;
+	inodo.permisos = permisos;
+	inodo.atime = time(NULL);
+	inodo.mtime = time(NULL);
+	inodo.ctime = time(NULL);
+	inodo.btime = time(NULL);
+	inodo.nlinks = 1;
+	inodo.tamEnBytesLog = 0;
+	inodo.numBloquesOcupados = 0;
+
+	//Inicializamos los punteros a 0
+	for(int i = 0; i < 12; i++) {
+		inodo.punterosDirectos[i] = 0;
+	}
+	for(int i = 0; i < 3; i++) {
+		inodo.punterosIndirectos[i] = 0;
+	}
+
+	//Actualizamos el primer inodo libre en el superbloque
+	SB.posPrimerInodoLibre = inodo.punterosDirectos[0];
+
+	//Decrementamos la cantidad de inodos libres
+	SB.cantInodosLibres--;
+
+	//Escribimos el inodo actualizado
+	if(escribir_inodo(ninodo, &inodo) == FALLO) {
+		fprintf(stderr, RED "Error al escribir el inodo\n" RESET);
+		return FALLO;
+	}
+
+	//Escribimos el superbloque actualizado
+	if(bwrite(posSB, &SB) == FALLO) {
+		fprintf(stderr, RED "Error al escribir la estructura en SB\n" RESET);
+		return FALLO;
+	}
+
+	return ninodo;
 }
