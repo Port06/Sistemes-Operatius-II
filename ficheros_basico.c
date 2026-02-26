@@ -120,22 +120,22 @@ return EXITO;
 }
 
 int escribir_bit(unsigned int nbloque, unsigned int bit){
-
+	//Leemos el superbloque para obtener la posicion del bloque de metadatos
 	struct superbloque SB;
 	if(bread(posSB, &SB) == FALLO) {
 		fprintf(stderr, RED "Error al leer la estructura en SB\n" RESET);
 		return FALLO;
 	}
+
+	//Calculamos la posicion del byte y el bit dentro del bloque de metadatos
 	int posbyteMB = nbloque / 8;
 	int posbit = nbloque % 8;
-
 	int nbloqueMB = posbyteMB / BLOCKSIZE;
-
 	int nbloqueabs = SB.posPrimerBloqueMB + nbloqueMB;
 
 	unsigned char bufferMB[BLOCKSIZE];
 
-	if (bread(SB.posPrimerBloqueMB + nbloqueMB, bufferMB) == FALLO) {
+	if (bread(nbloqueabs, bufferMB) == FALLO) {
 		fprintf(stderr, RED "Error al leer la estructura en SB\n" RESET);
 		return FALLO;
 	}
