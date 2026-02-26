@@ -106,10 +106,10 @@ int initAI(){
 				ContInodos++;
 			}else{
 				inodos[j].punterosDirectos[0] = UINT_MAX;
-				break;
+				BREAK;
 			}
-		
 		}
+		
 		if(bwrite(i, &inodos) == FALLO) {
 			fprintf(stderr, RED "Error al escribir la estructura en AI\n" RESET);
 			return FALLO;
@@ -357,6 +357,7 @@ int leer_inodo(unsigned int ninodo, struct inodo *inodo) {
 	
 }
 
+//Metodo de reserva de inodo
 int reservar_inodo(unsigned char tipo, unsigned char permisos) {
     struct superbloque SB;
     struct inodo inodo;
@@ -367,6 +368,12 @@ int reservar_inodo(unsigned char tipo, unsigned char permisos) {
         fprintf(stderr, RED "Error al leer el superbloque\n" RESET);
         return FALLO;
     }
+	
+	//Se comprueba de que la lista de inodos este libres
+	if (SB.posPrimerInodoLibre == UINT_MAX) {
+		fprintf(stderr, RED "Lista de inodos libres vacía\n" RESET);
+		return FALLO;
+	}
 
     //Se comprueba si hay inodos libres
     if (SB.cantInodosLibres == 0) {
@@ -421,4 +428,4 @@ int reservar_inodo(unsigned char tipo, unsigned char permisos) {
 
     //Se devuelve el numero del inodo reservado
     return posInodoReservado;
-}
+}.
