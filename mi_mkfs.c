@@ -1,6 +1,5 @@
 //Archivo mi_mkfs.c
 
-#include "bloques.h"
 #include "ficheros_basico.h"
 
 int main(int argc, char **argv) {
@@ -27,6 +26,25 @@ int main(int argc, char **argv) {
            bumount();
            return FALLO;
         }
+    }
+
+     //Nivel 2
+    if (initSB(atoi(argv[2]), atoi(argv[2])/4) == FALLO) { 
+        fprintf(stderr, RED "Error al inicializar los datos del superbloque\n" RESET);
+        bumount();
+        return FALLO;
+    }
+
+    if (initMB() == FALLO) {
+        fprintf(stderr, RED "Error al inicializar el mapa de bits\n" RESET);
+        bumount();
+        return FALLO;
+    }
+
+    if (initAI() == FALLO) {
+        fprintf(stderr, RED "Error al inicializar al inicializar la lista de inodos libres\n" RESET);
+        bumount();
+        return FALLO;
     }
 
     //Desmontamos el dispositivo virtual

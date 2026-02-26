@@ -74,6 +74,7 @@ int initSB(unsigned int nbloques, unsigned int ninodos) {
 	SB.totBloques = nbloques;
 	SB.totInodos = ninodos;
 
+
 	//Se comprueba que se haya escrito bien el superbloque
 	if (bwrite(posSB, &SB) == FALLO) {
 		fprintf(stderr, RED "Error al escribir la estructura en SB\n" RESET);
