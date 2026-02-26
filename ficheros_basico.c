@@ -223,9 +223,51 @@ int escribir_inodo(unsigned int ninodo, struct inodo *inodo) {
 		fprintf(stderr, RED "Error al leer la estructura en SB\n" RESET);
 		return FALLO;
 	}
+
+	int nbloqueAI = (ninodo * INODOSIZE) / BLOCKSIZE;
+	int nbloqueabs = SB.posPrimerBloqueAI + nbloqueAI;
+
+	struct inodo inodos[BLOCKSIZE/INODOSIZE];
+
+	if(bread(nbloqueabs, inodos) == FALLO) {
+		fprintf(stderr, RED "Error al leer la estructura en AI\n" RESET);
+		return FALLO;
+	}
+
+	int posinodo = ninodo % (BLOCKSIZE / INODOSIZE);
+	inodos[posinodo] = *inodo;
+
+	if(bwrite(nbloqueabs, inodos) == FALLO) {
+		fprintf(stderr, RED "Error al escribir la estructura en AI\n" RESET);
+		return FALLO;
+	}
+
+	return EXITO;
 }
 
 int leer_inodo(unsigned int ninodo, struct inodo *inodo) {
+	struct superbloque SB;
+	if(bread(posSB, &SB) == FALLO) {
+		fprintf(stderr, RED "Error al leer la estructura en SB\n" RESET);
+		return FALLO;
+	}
+
+	//Calculamos el bloque del array de inodos donde se encuentra el inodo que queremos leer (igual que en escribir_inodo)
+	int nbloqueAI = (ninodo * INODOSIZE) / BLOCKSIZE;
+	int nbloqueabs = SB.posPrimerBloqueAI + nbloqueAI;
+
+	struct inodo inodos[BLOCKSIZE/INODOSIZE];
+	if(bread(nbloqueabs, inodos) == FALLO) {
+		fprintf(stderr, RED "Error al leer la estructura en AI\n" RESET);
+		return FALLO;
+	}
+
+	//Calculamos la posicion del inodo dentro del bloque de inodos
+	int posinodo = ninodo % (BLOCKSIZE / INODOSIZE);
+	*inodo = inodos[posinodo];
+
+	return EXITO;
+	
 	
 }
 
