@@ -136,6 +136,7 @@ int escribir_bit(unsigned int nbloque, unsigned int bit){
 
 	unsigned char bufferMB[BLOCKSIZE];
 
+	//Lectura del bloque
 	if (bread(nbloqueabs, bufferMB) == FALLO) {
 		fprintf(stderr, RED "Error al leer la estructura en SB\n" RESET);
 		return FALLO;
@@ -146,12 +147,14 @@ int escribir_bit(unsigned int nbloque, unsigned int bit){
 	unsiged char mascara = 128; //10000000
 	mascara >>= posbit; //Desplazamos la mascara a la derecha segun el numero de bit
 
+	//Se escribe en la posicion alcanzada el valor del binario deseado
 	if(bit == 1){
 		bufferMB[posbyte] |= mascara; //Pone a 1 el bit
 	}else{
 		bufferMB[posbyte] &= ~mascara; //Pone a 0 el bit
 	}
-
+	
+	//Escritura del bloque con el bit modificado
 	if (bwrite(SB.posPrimerBloqueMB + nbloqueMB, bufferMB) == -1) {
 		return FALLO;
 	}
@@ -193,8 +196,87 @@ char leer_bit(unsiged int nbloque){
 }
 
 int reservar_bloque() {
-	
+	struct superbloque SB;
+
+    //Se lee del superbloque
+    if (bread(posSB, &SB) == FALLO) {
+        fprintf(stderr, RED "Error al leer el superbloque\n" RESET);
+        return FALLO;
+    }
+
+    //Se comprueba si quedan bloques libres
+    if (SB.cantBloquesLibres == 0) {
+        fprintf(stderr, RED "No quedan bloques libres\n" RESET);
+        return FALLO;
+    }
+
+    unsigned char bufferMB[BLOCKSIZE];
+    unsigned char bufferAux[BLOCKSIZE];
+
+    // bufferAux lleno de 1s (255)
+    memset(bufferAux, 255, BLOCKSIZE);
+
+    int nbloqueMB = 0;
+
+    //Se busca el primer bloque del megabyte con un bit a 0
+    while (nbloqueMB < (SB.posUltimoBloqueMB - SB.posPrimerBloqueMB + 1)) {
+        if (bread(SB.posPrimerBloqueMB + nbloqueMB, bufferMB) == FALLO) {
+            fprintf(stderr, RED "Error al leer bloque del MB\n" RESET);
+            return FALLO;
+        }
+
+        if (memcmp(bufferMB, bufferAux, BLOCKSIZE) != 0) {
+            break; // este bloque tiene al menos un 0
+        }
+
+        nbloqueMB++;
+    }
+
+    //Se localiza el primer byte con un bit a 0
+    int posbyte = 0;
+    while (bufferMB[posbyte] == 255) {
+        posbyte++;
+    }
+
+    //Se localiza el primer bit a 0 dentro del byte
+    unsigned char mascara = 128; // 10000000
+    int posbit = 0;
+
+	//Localiacion del bit dentro del byte
+    while (bufferMB[posbyte] & mascara) {
+        bufferMB[posbyte] <<= 1;
+        posbit++;
+    }
+
+    //Se calcula el numero de bloque fisico
+    int nbloque = (nbloqueMB * BLOCKSIZE + posbyte) * 8 + posbit;
+
+    //Se marca el bloque como ocupado en el megabyte
+    if (escribir_bit(nbloque, 1) == FALLO) {
+        fprintf(stderr, RED "Error al escribir bit en reservar_bloque\n" RESET);
+        return FALLO;
+    }
+
+    //Se actualiza el superbloque
+    SB.cantBloquesLibres--;
+    if (bwrite(posSB, &SB) == FALLO) {
+        fprintf(stderr, RED "Error al escribir el superbloque\n" RESET);
+        return FALLO;
+    }
+
+    //Se limpia el bloque de datos reservados
+    unsigned char bufferCeros[BLOCKSIZE];
+    memset(bufferCeros, 0, BLOCKSIZE);
+
+    if (bwrite(nbloque, bufferCeros) == FALLO) {
+        fprintf(stderr, RED "Error al limpiar el bloque reservado\n" RESET);
+        return FALLO;
+    }
+
+    //Se devuelve el numero del bloque reservado
+    return nbloque;
 }
+
 
 int liberar_bloque(unsigned int nbloque) {
 	struct superbloque SB;
