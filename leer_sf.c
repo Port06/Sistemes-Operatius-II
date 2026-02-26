@@ -41,7 +41,7 @@ char btime[80];
 
 
 struct inodo inodo;
-int ninodo;
+int ninodo = 0;
 
 leer_inodo(ninodo, &inodo);
 ts = localtime(&inodo.atime);
