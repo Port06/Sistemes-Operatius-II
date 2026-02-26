@@ -207,7 +207,7 @@ int reservar_bloque() {
     //Se comprueba si quedan bloques libres
     if (SB.cantBloquesLibres == 0) {
         fprintf(stderr, RED "No quedan bloques libres\n" RESET);
-        return FALLO;
+        return FALLO; //En caso negativo no se puede reservar un bloque
     }
 
     unsigned char bufferMB[BLOCKSIZE];
@@ -355,5 +355,66 @@ int leer_inodo(unsigned int ninodo, struct inodo *inodo) {
 }
 
 int reservar_inodo(unsigned char tipo, unsigned char permisos) {
+	struct superbloque SB;
+    struct inodo inodo;
+    unsigned int posInodoReservado;
 	
+	//Se lee el superbloque
+    if (bread(posSB, &SB) == FALLO) {
+        fprintf(stderr, RED "Error al leer el superbloque\n" RESET);
+        return FALLO;
+    }
+
+    //Se comprueba si hay inodos libres
+    if (SB.cantInodosLibres == 0) {
+        fprintf(stderr, RED "No quedan inodos libres\n" RESET);
+        return FALLO; //En caso negativo no se puede reservar el inodo
+    }
+	
+	//Se  guarda la posicion del primer inodo libre
+	psInodoReservado = SB.posPrimerInodoLibre;
+	
+	if(leer_inodo(psInodoReservado, &inodo) == FALLO) {
+		fprintf(stderr, RED "Error al leer el inodo libre\n" RESET);
+        return FALLO;
+    }
+	
+	//Se actualiza la llista de inodos enlazados libres
+    SB.posPrimerInodoLibre = inodo.punterosDirectos[0];
+
+    // inicializacion del inodo reservado
+    inodo.tipo = tipo;
+    inodo.permisos = permisos;
+    inodo.nlinks = 1;
+    inodo.tamEnBytesLog = 0;
+    inodo.atime = time(NULL);
+    inodo.mtime = time(NULL);
+    inodo.ctime = time(NULL);
+    inodo.bloquesOcupados = 0;
+
+    //Inicializacion de punteros directos
+    for (int i = 0; i < 12; i++) {
+        inodo.punterosDirectos[i] = 0; //0 para evitar basura
+    }
+
+    //Inizializacion de punteros indirectos
+    for (int i = 0; i < 3; i++) {
+        inodo.punterosIndirectos[i] = 0; //0 para evitar basura
+    }
+
+    //Se escribe el inodo ya inicializado
+    if (escribir_inodo(posInodoReservado, &inodo) == FALLO) {
+        fprintf(stderr, RED "Error al escribir el inodo reservado\n" RESET);
+        return FALLO;
+    }
+
+    //Se actualiza el superbloque
+    SB.cantInodosLibres--;
+    if (bwrite(posSB, &SB) == FALLO) {
+        fprintf(stderr, RED "Error al escribir el superbloque\n" RESET);
+        return FALLO;
+    }
+
+    //Se devuelve el numero del inodo reservado
+    return posInodoReservado;
 }
