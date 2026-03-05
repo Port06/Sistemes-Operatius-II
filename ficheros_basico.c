@@ -430,27 +430,32 @@ int reservar_inodo(unsigned char tipo, unsigned char permisos) {
     return posInodoReservado;
 }
 
-funcion obtener_nRangoBL (*inodo: struct inodo, nblogico:unsigned ent, *ptr:unsigned ent) devolver nrangoBL:ent
+//Funcion para calcular el rango necessario de 0 a 3 (capacidad maxima) 
+int obtener_nRangoBL (struct inodo *inodo, unsigned int nblogico, unsigned int *ptr) {
 
 
-    si nblogico<DIRECTOS entonces   // <12
-        *ptr:=inodo->punterosDirectos[nblogico]   
-		        devolver 0  
-    si_no si nblogico<INDIRECTOS0 entonces   // <268    
-        *ptr:=inodo->punterosIndirectos[0]        
-        devolver 1     
-    si_no si nblogico<INDIRECTOS1 entonces   // <65.804     
-        *ptr:=inodo->punterosIndirectos[1]            
-        devolver 2        
-    si_no si nblogico<INDIRECTOS2 entonces   // <16.843.020              
-        *ptr:=inodo->punterosIndirectos[2]               
-        devolver 3           
-    si_no          
-        *ptr:=0            
-        error("Bloque lógico fuera de rango")        
-        devolver -1  
-    fsi        
-ffuncion
+    if (nblogico<DIRECTOS) {  // <12
+        *ptr:=inodo->punterosDirectos[nblogico];   
+		return 0;  
+	}
+    else if (nblogico<INDIRECTOS0) {  // <268    
+        *ptr:=inodo->punterosIndirectos[0] ;       
+        return 1;
+    }
+    else if (nblogico<INDIRECTOS1 entonces) { // <65.804     
+        *ptr:=inodo->punterosIndirectos[1];            
+        return 2;
+	}
+    else if (nblogico<INDIRECTOS2 entonces) { // <16.843.020              
+        *ptr:=inodo->punterosIndirectos[2];               
+        return 3;
+    }
+    else {          
+        *ptr:=0;            
+        fprintf(stderr, RED "Error bloque logico fuera de rango\n" RESET);        
+        return -1;  
+    }        
+};
 
 
 funcion obtener_indice (nblogico: unsigned ent, nivel_punteros:ent) devolver ind:ent
