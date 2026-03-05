@@ -458,25 +458,28 @@ int obtener_nRangoBL (struct inodo *inodo, unsigned int nblogico, unsigned int *
 };
 
 
-funcion obtener_indice (nblogico: unsigned ent, nivel_punteros:ent) devolver ind:ent
-si nblogico < DIRECTOS entonces devolver nblogico   //ej. nblogico=8
-si_no si nblogico < INDIRECTOS0 entonces devolver nblogico - DIRECTOS   //ej. nblogico=204
-si_no si nblogico < INDIRECTOS1 entonces   //ej. nblogico=30.004        
-  si nivel_punteros = 2 entonces
-     devolver (nblogico - INDIRECTOS0) / NPUNTEROS           
-  si_no si nivel_punteros=1 entonces
-     devolver (nblogico - INDIRECTOS0) % NPUNTEROS           
-  fsi        
-si_no si nblogico < INDIRECTOS2 entonces   //ej. nblogico=400.004           
-  si nivel_punteros = 3 entonces
-     devolver (nblogico - INDIRECTOS1) / (NPUNTEROS * NPUNTEROS)              
-  si_no si nivel_punteros = 2 entonces      
-     devolver ((nblogico - INDIRECTOS1) % (NPUNTEROS * NPUNTEROS)) / NPUNTEROS            
-  si_no si nivel_punteros = 1 entonces    
-     devolver ((nblogico - INDIRECTOS1) % (NPUNTEROS * NPUNTEROS)) % NPUNTEROS   
-  fsi            
-fsi
-ffuncion
+int obtener_indice (unsigned int nblogico , int nivel_punteros) {
+    if (nblogico < DIRECTOS) {  //ej. nblogico=8
+        return nblogico;
+    } else if (nblogico < INDIRECTOS0) {
+        return nblogico - DIRECTOS; //ej. nblogico=204
+    } else if (nblogico < INDIRECTOS1) { //ej. nblogico=30.004   
+        if (nivel_punteros == 2) {
+            return (nblogico - INDIRECTOS0) / NPUNTEROS
+        } else if (nivel_punteros==1) {
+            return  (nblogico - INDIRECTOS0) % NPUNTEROS  
+        }
+    } else if (nblogico < INDIRECTOS2) {  //ej. nblogico=400.004     
+        if(nivel_punteros == 3) {
+            return (nblogico - INDIRECTOS1) / (NPUNTEROS * NPUNTEROS)
+        } else if(nivel_punteros == 2) {
+            return ((nblogico - INDIRECTOS1) % (NPUNTEROS * NPUNTEROS)) / NPUNTEROS;
+        } else if (nivel_punteros == 1) {
+            return ((nblogico - INDIRECTOS1) % (NPUNTEROS * NPUNTEROS)) % NPUNTEROS;   
+        }
+    }     
+    return FALLO;
+}
 
 
 int traducir_bloque_inodo(unsigned int inodo, unsigned int nblogico, unsigned char reservar) {
