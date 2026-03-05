@@ -435,23 +435,23 @@ int obtener_nRangoBL (struct inodo *inodo, unsigned int nblogico, unsigned int *
 
 
     if (nblogico<DIRECTOS) {  // <12
-        *ptr:=inodo->punterosDirectos[nblogico];   
+        *ptr=inodo->punterosDirectos[nblogico];   
 		return 0;  
 	}
     else if (nblogico<INDIRECTOS0) {  // <268    
-        *ptr:=inodo->punterosIndirectos[0] ;       
+        *ptr=inodo->punterosIndirectos[0] ;       
         return 1;
     }
-    else if (nblogico<INDIRECTOS1 entonces) { // <65.804     
-        *ptr:=inodo->punterosIndirectos[1];            
+    else if (nblogico<INDIRECTOS1) { // <65.804     
+        *ptr=inodo->punterosIndirectos[1];            
         return 2;
 	}
-    else if (nblogico<INDIRECTOS2 entonces) { // <16.843.020              
-        *ptr:=inodo->punterosIndirectos[2];               
+    else if (nblogico<INDIRECTOS2) { // <16.843.020              
+        *ptr=inodo->punterosIndirectos[2];               
         return 3;
     }
     else {          
-        *ptr:=0;            
+        *ptr=0;            
         fprintf(stderr, RED "Error bloque logico fuera de rango\n" RESET);        
         return FALLO;  
     }        
@@ -465,13 +465,13 @@ int obtener_indice (unsigned int nblogico , int nivel_punteros) {
         return nblogico - DIRECTOS; //ej. nblogico=204
     } else if (nblogico < INDIRECTOS1) { //ej. nblogico=30.004   
         if (nivel_punteros == 2) {
-            return (nblogico - INDIRECTOS0) / NPUNTEROS
+            return (nblogico - INDIRECTOS0) / NPUNTEROS;
         } else if (nivel_punteros==1) {
-            return  (nblogico - INDIRECTOS0) % NPUNTEROS  
+            return  (nblogico - INDIRECTOS0) % NPUNTEROS;
         }
     } else if (nblogico < INDIRECTOS2) {  //ej. nblogico=400.004     
         if(nivel_punteros == 3) {
-            return (nblogico - INDIRECTOS1) / (NPUNTEROS * NPUNTEROS)
+            return (nblogico - INDIRECTOS1) / (NPUNTEROS * NPUNTEROS);
         } else if(nivel_punteros == 2) {
             return ((nblogico - INDIRECTOS1) % (NPUNTEROS * NPUNTEROS)) / NPUNTEROS;
         } else if (nivel_punteros == 1) {
@@ -509,7 +509,7 @@ int traducir_bloque_inodo(unsigned int ninodo, unsigned int nblogico, unsigned c
 			salvar_inodo = 1;
         };
     }  
-    else if { //Caso de punteros Indirectos
+    else { //Caso de punteros Indirectos
         while (nivel_punteros>0) { //Iterar para cada nivel de punteros indirectos
             if (ptr == 0) { //No cuelgan bloques de punteros
 				if (reservar == 0) return FALLO; //Error bloque a no imprimir por pantalla
