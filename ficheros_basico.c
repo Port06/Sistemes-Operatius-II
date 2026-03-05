@@ -498,7 +498,7 @@ int traducir_bloque_inodo(unsigned int ninodo, unsigned int nblogico, unsigned c
 	nRangoBL = obtener_nRangoBL(&inodo, nblogico, &ptr); //0:D, 1:I0, 2:I1, 3:I2
 	nivel_punteros = nRangoBL; //El nivel_punteros +alto es el que cuelga directamente del inodo
 
-   if (nRangoBL == 0) { //Caso punteros Directos
+    if (nRangoBL == 0) { //Caso punteros Directos
 
         if (ptr == 0) { //No existe bloque de datos
 			if (reservar == 0) return FALLO; //Error bloque a no imprimir por pantalla 
@@ -513,7 +513,7 @@ int traducir_bloque_inodo(unsigned int ninodo, unsigned int nblogico, unsigned c
         while (nivel_punteros>0) { //Iterar para cada nivel de punteros indirectos
             if (ptr == 0) { //No cuelgan bloques de punteros
 				if (reservar == 0) return FALLO; //Error bloque a no imprimir por pantalla
-				//Reservar bloques de punteros y crear enlaces desde el  inodo hasta el bloque de datos
+				//Reservar bloques de punteros y crear enlaces desde el inodo hasta el bloque de datos
 				ptr = reservar_bloque(); //Reservacion de bloque de punteros                  
 				inodo.numBloquesOcupados++;
 				inodo.ctime = time(NULL); //Fecha actual
