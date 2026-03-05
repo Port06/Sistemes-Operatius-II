@@ -106,7 +106,7 @@ int initAI(){
 				ContInodos++;
 			}else{
 				inodos[j].punterosDirectos[0] = UINT_MAX;
-				BREAK;
+				break;;
 			}
 		}
 		
