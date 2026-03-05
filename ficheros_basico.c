@@ -453,11 +453,11 @@ int obtener_nRangoBL (struct inodo *inodo, unsigned int nblogico, unsigned int *
     else {          
         *ptr:=0;            
         fprintf(stderr, RED "Error bloque logico fuera de rango\n" RESET);        
-        return -1;  
+        return FALLO;  
     }        
 };
 
-
+//Funcion para obtener el valor entero del indice
 int obtener_indice (unsigned int nblogico , int nivel_punteros) {
     if (nblogico < DIRECTOS) {  //ej. nblogico=8
         return nblogico;
@@ -482,69 +482,72 @@ int obtener_indice (unsigned int nblogico , int nivel_punteros) {
 }
 
 
-int traducir_bloque_inodo(unsigned int inodo, unsigned int nblogico, unsigned char reservar) {
+int traducir_bloque_inodo(unsigned int ninodo, unsigned int nblogico, unsigned char reservar) {
 	
-	var
-      ptr, ptr_ant, salvar_inodo:  unsigned ent  
-      nRangoBL, nivel_punteros, indice:  ent  
-      buffer[NPUNTEROS]: unsigned ent 
-      inodo: struct inodo
-   fvar
-   ptr := 0, ptr_ant := 0, salvar_inodo := 0, indice:= 0
-   leer_inodo(ninodo, &inodo)
-   nRangoBL := obtener_nRangoBL(&inodo, nblogico, &ptr); //0:D, 1:I0, 2:I1, 3:I2
-   nivel_punteros := nRangoBL //el nivel_punteros +alto es el que cuelga directamente del inodo
+	//Definicion de variables
+    unsigned int ptr, ptr_ant, salvar_inodo;
+    int nRangoBL, nivel_punteros, indice;   
+    unsigned int buffer[NPUNTEROS]; 
+    struct inodo inodo;
+   
+	ptr = 0;
+	ptr_ant = 0;
+	salvar_inodo = 0;
+	indice = 0;
+	leer_inodo(ninodo, &inodo);
+	nRangoBL = obtener_nRangoBL(&inodo, nblogico, &ptr); //0:D, 1:I0, 2:I1, 3:I2
+	nivel_punteros = nRangoBL; //El nivel_punteros +alto es el que cuelga directamente del inodo
 
-   si nRangoBL=0 entonces //Caso punteros Directos
+   if (nRangoBL == 0) { //Caso punteros Directos
 
-      si ptr=0 //no existe bloque de datos
-         si reservar=0 entonces devolver -1 fsi  //error ∄ bloque -> no imprimir error por pantalla!!! 
-         ptr = reservar_bloque() //de datos
-         inodo.numBloquesOcupados++
-         inodo.ctime = time(NULL)
-         inodo.punterosDirectos[nblogico] := ptr //asignamos la direción del bl. de datos en el inodo
-         salvar_inodo := 1
-      fsi
+        if (ptr == 0) { //No existe bloque de datos
+			if (reservar == 0) return FALLO; //Error bloque a no imprimir por pantalla 
+			ptr = reservar_bloque(); //Reservacion de bloque de datos
+			inodo.numBloquesOcupados++;
+			inodo.ctime = time(NULL);
+			inodo.punterosDirectos[nblogico] = ptr; //Se asigna la direción del bloque de datos en el inodo
+			salvar_inodo = 1;
+        };
+    }  
+    else if { //Caso de punteros Indirectos
+        while (nivel_punteros>0) { //Iterar para cada nivel de punteros indirectos
+            if (ptr == 0) { //No cuelgan bloques de punteros
+				if (reservar == 0) return FALLO; //Error bloque a no imprimir por pantalla
+				//Reservar bloques de punteros y crear enlaces desde el  inodo hasta el bloque de datos
+				ptr = reservar_bloque(); //Reservacion de bloque de punteros                  
+				inodo.numBloquesOcupados++;
+				inodo.ctime = time(NULL); //Fecha actual
+				salvar_inodo = 1;
+				if (nivel_punteros == nRangoBL) {  //El bloque cuelga directamente del inodo 
+					inodo.punterosIndirectos[nRangoBL-1] = ptr;
+				}
+				else { //El bloque cuelga de otro bloque de punteros
+					buffer[indice] = ptr; 
+					bwrite(ptr_ant, buffer);  //Salvamos en el dispositivo el buffer de punteros modificado           
+				};
+				memset(buffer, 0, BLOCKSIZE); //Ponemos a 0 todos los punteros del buffer 
+			}
+			else { //ptr!=0
+				bread(ptr, buffer); //Leemos del dispositivo el bloque de punteros ya existente
+			};
+			indice = obtener_indice(nblogico, nivel_punteros);
+			ptr_ant = ptr; //Guardamos el puntero actual
+			ptr = buffer[indice]; //Lo desplazamos al siguiente nivel 
+			nivel_punteros--;   
+	    } //Al salir de este bucle ya estamos al nivel de datos
+		
+		if (ptr == 0) {
+			if (reservar == 0) return FALLO;  //Bloque inexistente a no imprimir por pantalla
+			ptr = reservar_bloque(); //Reservacion de bloque de datos                  
+			inodo.numBloquesOcupados++;
+			inodo.ctime = time(NULL); //Fecha actual
+			salvar_inodo = 1;
+			buffer[indice] = ptr; //Asignamos la dirección del bloque de datos en el buffer
+			bwrite(ptr_ant, buffer); //Salvamos en el dispositivo el buffer de punteros modificado 
+		};
+	}; //Fin caso Indirectos
 
-   si_no //Caso de punteros Indirectos
-      mientras nivel_punteros>0 hacer //iterar para cada nivel de punteros indirectos
-          si ptr=0 entonces //no cuelgan bloques de punteros
-             si reservar=0 entonces devolver -1 fsi// error ∄ bloque ->  no imprimir error por pantalla!!!
-             //reservar bloques de punteros y crear enlaces desde el  inodo hasta el bloque de datos
-             ptr := reservar_bloque() //de punteros                  
-             inodo.numBloquesOcupados++
-             inodo.ctime = time(NULL) //fecha actual
-             salvar_inodo := 1
-             si nivel_punteros = nRangoBL entonces  //el bloque cuelga directamente del inodo
-                inodo.punterosIndirectos[nRangoBL-1] := ptr 
-             si_no   //el bloque cuelga de otro bloque de punteros
-                buffer[indice] := ptr 
-                bwrite(ptr_ant, buffer)  //salvamos en el dispositivo el buffer de punteros modificado           
-             fsi
-             memset(buffer, 0, BLOCKSIZE) //ponemos a 0 todos los punteros del buffer 
-         si_no //ptr!=0
-            bread(ptr, buffer) //leemos del dispositivo el bloque de punteros ya existente
-         fsi
-         indice := obtener_indice(nblogico, nivel_punteros)
-         ptr_ant := ptr //guardamos el puntero actual
-         ptr := buffer[indice] // y lo desplazamos al siguiente nivel 
-         nivel_punteros--   
-      fmientras   //al salir de este bucle ya estamos al nivel de datos
-		si ptr=0 entonces 
-         si reservar=0 entonces devolver -1 fsi  //bloque inexistente -> no imprimir error por pantalla!!!
-         ptr := reservar_bloque() //de datos                  
-         inodo.numBloquesOcupados++
-         inodo.ctime = time(NULL) //fecha actual
-         salvar_inodo := 1
-         buffer[indice] := ptr //asignamos la dirección del bloque de datos en el buffer
-         bwrite(ptr_ant, buffer) //salvamos en el dispositivo el buffer de punteros modificado 
-      fsi
-   fsi  //fin caso Indirectos
-
-   //salvar el inodo si se han hecho cambios y se desea no tener un big lock al usar semáforos
-   si salvar_inodo entonces escribir_inodo(ninodo, &inodo) fsi
-   devolver ptr //nº de bloque físico correspondiente al bloque de datos lógico, nblogico
-ffuncion
-
-	
+	//Salvar el inodo si se han hecho cambios y se desea no tener un big lock al usar semáforos
+	if (salvar_inodo) escribir_inodo(ninodo, &inodo);
+    return ptr; //Numero de bloque físico correspondiente al bloque de datos lógico, nblogico	
 }; 
