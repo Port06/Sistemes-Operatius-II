@@ -106,7 +106,7 @@ int initAI(){
 				ContInodos++;
 			}else{
 				inodos[j].punterosDirectos[0] = UINT_MAX;
-				break;
+				BREAK;
 			}
 		}
 		
@@ -428,4 +428,4 @@ int reservar_inodo(unsigned char tipo, unsigned char permisos) {
 
     //Se devuelve el numero del inodo reservado
     return posInodoReservado;
-}
+}.
