@@ -5,27 +5,86 @@
 
 
 int mi_write_f(unsigned int ninodo, const void *buf_original, unsigned int offset, unsigned int nbytes) {
-	int buf_bloque;
-	int desp1; // Desplazamiento en el bloque parte de la izquierda
-	int desp2; // Desplazamiento en el bloque parte de la derecha
+	struct inodo inodo;
+    unsigned int primerBL, ultimoBL; // Bloque inicial y final de la escritura
+    unsigned int desp1, desp2; // Desplazamientos dentro de los bloques necesarios para el primer y ultimo bloque
+    unsigned int nbfisico; // BLoque de memoria existente en la memoria
+    unsigned int bytesEscritos = 0;
+    unsigned char buf_bloque[BLOCKSIZE];
 	
-	// Primer bloque logico (preservar desp1)
-	buf_bloque = traducir_bloque_inodo (ninodo, primerBLogico, 1)
+	mi_read_f(ninodo, &inodo); // O leer_inodo
+
+	if ((inodo.permisos & 2) != 2) {
+    fprintf(stderr, "No hay permisos de escritura\n");
+    return FALLO;
+	}
 	
+	// Calcular los desplazamientos y bloques de escritura
+	primerBL = offset / BLOCKSIZE;
+	ultimoBL = (offset + nbytes - 1) / BLOCKSIZE;
+
 	desp1 = offset % BLOCKSIZE;
-	desp2 = BLOCKSIZE - desp1;
+	desp2 = (offset + nbytes - 1) % BLOCKSIZE;
 	
-	memcpy (buf_bloque + 808, buf_original, 216);	
-	bwrite(desp1, buf_original);
+	//Caso 1: primerBL == ultimoBL
+	if (primerBL == ultimoBL){
+
+		nbfisico = traducir_bloque_inodo(ninodo, primerBL, 1); // Almacenar el contenido existente de la memoria
+		bread(nbfisico, buf_bloque);
+
+		memcpy(buf_bloque + desp1, buf_original, nbytes); // Combinacion del bloque existente y del contenido a escribir
+
+		bwrite(nbfisico, buf_bloque); // Escritura del nuevo contenido del bloque a memoria
+		bytesEscritos = nbytes;
+	}
+	else{ //Caso 2: primerBL != ultimoBL
+
+		// Primer bloque
+		nbfisico = traducir_bloque_inodo(ninodo, primerBL, 1); // Almacenar el contenido existente de la memoria
+		bread(nbfisico, buf_bloque);
+
+		memcpy(buf_bloque + desp1, buf_original, BLOCKSIZE - desp1);
+
+		bwrite(nbfisico, buf_bloque); // Escritura del nuevo contenido del bloque a memoria
+		bytesEscritos += BLOCKSIZE - desp1;
+		
+		// Bloques intermediso
+		for(int bl = primerBL + 1; bl < ultimoBL; bl++){ // Para cada bloque de memoria que no sea ni el primero ni el ultimo
+
+			nbfisico = traducir_bloque_inodo(ninodo, bl, 1); // Obtener el contenido de la memoria para cada bloque
+
+			// Escritura del nuevo contenido del bloque a memoria
+			bwrite(nbfisico, buf_original + (BLOCKSIZE - desp1) + (bl - primerBL - 1) * BLOCKSIZE);
+			bytesEscritos += BLOCKSIZE;
+		}
+		
+		// Ultimo bloque	
+		nbfisico = traducir_bloque_inodo(ninodo, ultimoBL, 1); // Almacenar el contenido existente de la memoria
+		bread(nbfisico, buf_bloque);
+
+		memcpy(buf_bloque, buf_original + (nbytes - (desp2 + 1)), desp2 + 1); // Combinacion del bloque existente y del contenido a escribir
+
+		bwrite(nbfisico, buf_bloque); // Escritura del nuevo contenido del bloque a memoria
+		bytesEscritos += desp2 + 1;
+	}	
 	
-	// Bloques logicos intermedios
-	buf_original + (BLOCKSIZE - desp1) + (bl - primerBL - 1) * BLOCKSIZE;
-	bwrite(nbfisico, buf_original + (1024 – 808) + (bl – 8 – 1) * 1024);
+	// Lectura del inodo para actualizar sus metadatos
+	leer_inodo(ninodo, &inodo);
+
+	// Si la escritura ha sobrepasado el tamano logico actual del fichero,
+	// significa que hemos ampliado el fichero y debemos actualizar tamEnBytesLog
+	// El nuevo tamaño será la ultima posicion escrita: offset + nbytes
+	if (offset + nbytes > inodo.tamEnBytesLog){
+		inodo.tamEnBytesLog = offset + nbytes;
+	}
+
+	inodo.mtime = time(NULL);
+	inodo.ctime = time(NULL);
+
+	// Guardamos el inodo actualizado en disco
+	escribir_inodo(ninodo, inodo);
 	
-	// Ultimo bloque logico (preservar desp2)
-	buf_bloque = traducir_bloque_inodo(ninodo, ultimoBLogico, 1);
-	memcpy (buf_bloque, buf_original + (3751 – 462 - 1), 462 + 1);
-	bwrite(desp2, buf_bloque);
+	return bytesEscritos;
 };
 
 int mi_read_f(unsigned int ninodo, void *buf_original, unsigned int offset, unsigned int nbytes) {
