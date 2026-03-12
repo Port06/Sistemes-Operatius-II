@@ -89,6 +89,35 @@ int mi_write_f(unsigned int ninodo, const void *buf_original, unsigned int offse
 
 int mi_read_f(unsigned int ninodo, void *buf_original, unsigned int offset, unsigned int nbytes) {
 
+	struct inodo inodo;
+	unsigned int bytesLeidos = 0;
+	if(leer_inodo(ninodo, &inodo) == FALLO) {
+		fprintf(stderr, RED "Error al leer el inodo en mi_read_f\n" RESET);
+		return FALLO;
+	}
+
+	if((inodo.permisos & 4) != 4) {
+		fprintf(stderr, RED "Error, el inodo no tiene permisos de lectura\n" RESET);
+		return FALLO;
+	}
+
+	if(offset > inodo.tamEnBytesLog) {
+		fprintf(stderr, RED "Error, el offset es mayor que el tamaño lógico del fichero\n" RESET);
+		bytesLeidos = 0;
+		return bytesLeidos;
+	}else{
+		if((offset + nbytes) >= inodo.tamEnBytesLog) {
+			nbytes = inodo.tamEnBytesLog - offset;
+		}
+	}
+
+	int primerBL = offset / BLOCKSIZE;
+	int ultimoBL = (offset + nbytes - 1) / BLOCKSIZE;
+	desp1 = offset % BLOCKSIZE;
+
+	
+	
+
 };
 
 int mi_stat_f(unsigned int ninodo, struct STAT *p_stat) {
@@ -113,7 +142,7 @@ int mi_stat_f(unsigned int ninodo, struct STAT *p_stat) {
 
 int mi_chmod_f(unsigned int ninodo, unsigned char permisos) {
 	struct inodo inodo;
-	
+
 	if(leer_inodo(ninodo, &inodo) == FALLO) {
 		fprintf(stderr, RED "Error al leer el inodo en mi_chmod_f\n" RESET);
 		return FALLO;
