@@ -551,3 +551,7 @@ int traducir_bloque_inodo(unsigned int ninodo, unsigned int nblogico, unsigned c
 	if (salvar_inodo) escribir_inodo(ninodo, &inodo);
     return ptr; //Numero de bloque físico correspondiente al bloque de datos lógico, nblogico	
 };
+
+int liberar_inodo(unsigned int ninodo);
+
+int liberar_bloques_inodo(unsigned int primerBL, struct inodo *inodo);
