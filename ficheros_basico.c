@@ -667,3 +667,4 @@ int liberar_indirectos_recursivo(unsigned int nBL, unsigned int primerBL, unsign
 
    devolver liberados
 }
+
