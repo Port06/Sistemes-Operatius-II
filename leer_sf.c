@@ -40,13 +40,8 @@ int main(int argc, char **argv){
 	char btime[80];
 
 
-<<<<<<< HEAD
 struct inodo inodo;
 int ninodo = 0;
-=======
-	struct inodo inodo;
-	int ninodo;
->>>>>>> c1202a8adeaf2934af39b23b9d1e40d133b78c62
 
 	leer_inodo(ninodo, &inodo);
 	ts = localtime(&inodo.atime);
