@@ -32,6 +32,7 @@ int main(int argc, char **argv){
 
     for(int i=0; i<5; i++){
 
+		// Si necesario, reservar un nuevo inodo en cada iteración
         if(diferentes_inodos == 1){
             ninodo = reservar_inodo('f',6);
             printf("Nº inodo reservado: %d\n", ninodo);
@@ -39,10 +40,12 @@ int main(int argc, char **argv){
 
         printf("\nOffset: %d\n", offsets[i]);
 
+		// Lectura
         int escritos = mi_write_f(ninodo, texto, offsets[i], strlen(texto));
 
         printf("Bytes escritos: %d\n", escritos);
 
+		// Se obtiene información del inodo
         struct STAT stat;
 
         mi_stat_f(ninodo,&stat);
