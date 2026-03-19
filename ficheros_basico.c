@@ -552,7 +552,44 @@ int traducir_bloque_inodo(unsigned int ninodo, unsigned int nblogico, unsigned c
     return ptr; //Numero de bloque físico correspondiente al bloque de datos lógico, nblogico	
 };
 
-int liberar_inodo(unsigned int ninodo);
+int liberar_inodo(unsigned int ninodo) {
+	
+	// El primer bloque siempre empieza en 0
+	unsigned int primerBL = 0;
+	
+	// Definicion struct de inodo
+	struct inodo inodo;
+	leer_inodo(ninodo, &inodo);
+
+	// Obtener el numero de bloques inodo liberados
+	int liberados = liberar_bloques_inodo(primerBL, &inodo);
+	
+	inodo.numBloquesOcupados -= liberados; // debería quedar a 0
+	inodo.tipo = 'l';
+	inodo.tamEnBytesLog = 0;
+	
+	// Definicion struct de superbloque
+	struct superbloque SB;
+	bread(posSB, &SB);
+
+	// El inodo liberado apunta al antiguo primero libre
+	inodo.punterosDirectos[0] = SB.posPrimerInodoLibre;
+
+	// Ahora el primero libre es este
+	SB.posPrimerInodoLibre = ninodo;	
+	SB.cantInodosLibres++;
+	
+	// Escribir el superbloque
+	bwrite(posSB, &SB);
+
+	// Actualizar tiempo de cambio
+	inodo.ctime = time(NULL);
+	
+	// Escribir el inodo antes de devolverlo
+	escribir_inodo(ninodo, &inodo);
+
+	return ninodo;	
+}
 
 int liberar_bloques_inodo(unsigned int primerBL, struct inodo *inodo) {
 	
@@ -564,10 +601,8 @@ int liberar_bloques_inodo(unsigned int primerBL, struct inodo *inodo) {
     if (inodo->tamEnBytesLog == 0) return 0; // el fichero está vacío
 
 	// obtenemos el último bloque lógico del inodo
-	if (inodo->tamEnBytesLog % BLOCKSIZE == 0) {
-		ultimoBL = inodo->tamEnBytesLog / BLOCKSIZE - 1;
-	} else {		
-		ultimoBL = inodo->tamEnBytesLog / BLOCKSIZE;
+	if (inodo->tamEnBytesLog % BLOCKSIZE == 0) {		
+		ultimoBL = (inodo->tamEnBytesLog - 1) / BLOCKSIZE;
 	}
 
     nRangoBL = obtener_nRangoBL(inodo, nBL, &ptr);
