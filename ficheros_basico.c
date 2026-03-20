@@ -34,28 +34,30 @@ int tamAI(unsigned int ninodos) {
 
 //Metodo que inizializa a los bits del los metadatos
 int initMB() {
-	struct superbloque SB;
-	//Leemos el superbloque
-	if (bread(posSB, &SB) == FALLO) {
-		fprintf(stderr, RED "Error al leer la estructura en SB\n" RESET);
-		return FALLO;
-	}
-	
-	unsigned int bloquesMetadatos;
-	unsigned int bytesCompletos;
-	unsigned int bitsResto;
-	
-	bloquesMetadatos = SB.posPrimerBloqueDatos;
+    struct superbloque SB;
 
-	unsigned int bitsMetadatos;
+    // Leemos el superbloque
+    if (bread(posSB, &SB) == FALLO) {
+        fprintf(stderr, RED "Error al leer la estructura en SB\n" RESET);
+        return FALLO;
+    }
 
-	bitsMetadatos = bloquesMetadatos;     //Cada bloque es 1 bit
+    // Marcamos como ocupados todos los bloques de metadatos
+    for (unsigned int i = 0; i < SB.posPrimerBloqueDatos; i++) {
+        escribir_bit(i, 1);
+    }
 
-	bytesCompletos = bitsMetadatos / 8;   //Los bytes completos a 11111111
-	bitsResto = bitsMetadatos % 8;   //Los bits sueltos del siguiente byte
+    // Corregimos la cantidad de bloques libres
+    SB.cantBloquesLibres = SB.totBloques - SB.posPrimerBloqueDatos;
 
-	return EXITO;
-}; 
+    // Guardamos el superbloque actualizado
+    if (bwrite(posSB, &SB) == FALLO) {
+        fprintf(stderr, RED "Error al escribir el superbloque\n" RESET);
+        return FALLO;
+    }
+
+    return EXITO;
+}
 
 //Metodo que iniziliza el superbloque
 int initSB(unsigned int nbloques, unsigned int ninodos) {
@@ -106,7 +108,7 @@ int initAI(){
 				ContInodos++;
 			}else{
 				inodos[j].punterosDirectos[0] = UINT_MAX;
-				BREAK;
+				break;
 			}
 		}
 		
