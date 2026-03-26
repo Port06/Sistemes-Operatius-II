@@ -1,5 +1,5 @@
-#include “bloques.h”
-#include “ficheros_basico.h”
+#include "ficheros.h"
+#include "ficheros_basico.h"
 #include <time.h>
 #include <limits.h>
 
@@ -12,7 +12,10 @@ int mi_write_f(unsigned int ninodo, const void *buf_original, unsigned int offse
     unsigned int bytesEscritos = 0;
     unsigned char buf_bloque[BLOCKSIZE];
 	
-	mi_read_f(ninodo, &inodo); // O leer_inodo
+	// O leer_inodo
+	if (leer_inodo(ninodo, &inodo) == FALLO) {
+		return FALLO;
+	}
 
 	if ((inodo.permisos & 2) != 2) {
     fprintf(stderr, "No hay permisos de escritura\n");
@@ -82,50 +85,125 @@ int mi_write_f(unsigned int ninodo, const void *buf_original, unsigned int offse
 	inodo.ctime = time(NULL);
 
 	// Guardamos el inodo actualizado en disco
-	escribir_inodo(ninodo, inodo);
+	escribir_inodo(ninodo, &inodo);
 	
 	return bytesEscritos;
 };
 
-int mi_read_f(unsigned int ninodo, void *buf_original, unsigned int offset, unsigned int nbytes) {
+// int mi_read_f(unsigned int ninodo, void *buf_original, unsigned int offset, unsigned int nbytes) {
 
-	struct inodo inodo;
-	unsigned int bytesLeidos = 0;
-	if(leer_inodo(ninodo, &inodo) == FALLO) {
-		fprintf(stderr, RED "Error al leer el inodo en mi_read_f\n" RESET);
-		return FALLO;
-	}
+// 	struct inodo inodo;
+// 	unsigned int bytesLeidos = 0;
+// 	if(leer_inodo(ninodo, &inodo) == FALLO) {
+// 		fprintf(stderr, RED "Error al leer el inodo en mi_read_f\n" RESET);
+// 		return FALLO;
+// 	}
 
-	if((inodo.permisos & 4) != 4) {
-		fprintf(stderr, RED "Error, el inodo no tiene permisos de lectura\n" RESET);
-		return FALLO;
-	}
+// 	if((inodo.permisos & 4) != 4) {
+// 		fprintf(stderr, RED "Error, el inodo no tiene permisos de lectura\n" RESET);
+// 		return FALLO;
+// 	}
 
-	if(offset > inodo.tamEnBytesLog) {
-		fprintf(stderr, RED "Error, el offset es mayor que el tamaño lógico del fichero\n" RESET);
-		bytesLeidos = 0;
-		return bytesLeidos;
-	}else{
-		if((offset + nbytes) >= inodo.tamEnBytesLog) {
-			nbytes = inodo.tamEnBytesLog - offset;
-		}
-	}
+// 	if(offset > inodo.tamEnBytesLog) {
+// 		fprintf(stderr, RED "Error, el offset es mayor que el tamaño lógico del fichero\n" RESET);
+// 		bytesLeidos = 0;
+// 		return bytesLeidos;
+// 	}else{
+// 		if((offset + nbytes) >= inodo.tamEnBytesLog) {
+// 			nbytes = inodo.tamEnBytesLog - offset;
+// 		}
+// 	}
 
-	int primerBL = offset / BLOCKSIZE;
-	int ultimoBL = (offset + nbytes - 1) / BLOCKSIZE;
-	desp1 = offset % BLOCKSIZE;
+// 	int primerBL = offset / BLOCKSIZE;
+// 	int ultimoBL = (offset + nbytes - 1) / BLOCKSIZE;
+// 	int desp1 = offset % BLOCKSIZE;
 
-	
-	
+// };
 
-};
+int mi_read_f(unsigned int ninodo, void *buf_original, unsigned int offset, unsigned int nbytes)
+{
+    struct inodo inodo;
+    unsigned int primerBL, ultimoBL, nbfisico;
+    int desp1, desp2, nbytesLeidos = 0;
+    char buf_bloque[BLOCKSIZE];
+
+    // Leer inodo
+    if (leer_inodo(ninodo, &inodo) == -1) return -1;
+
+    // Comprobar permisos de lectura
+    if ((inodo.permisos & 4) != 4) {
+        fprintf(stderr, "no tienes permisos de lectura\n");
+        return -1;
+    }
+
+    // Evitar leer más allá del tamaño lógico
+    if (offset >= inodo.tamEnBytesLog) return 0;
+    if (offset + nbytes > inodo.tamEnBytesLog)
+        nbytes = inodo.tamEnBytesLog - offset;
+
+    primerBL = offset / BLOCKSIZE;
+    ultimoBL = (offset + nbytes - 1) / BLOCKSIZE;
+    desp1 = offset % BLOCKSIZE;
+    desp2 = (offset + nbytes - 1) % BLOCKSIZE;
+
+    if (primerBL == ultimoBL) {
+        nbfisico = traducir_bloque_inodo(ninodo, primerBL, 0);
+        if (nbfisico != -1) {
+            if (bread(nbfisico, buf_bloque) == -1) return -1;
+            memcpy(buf_original, buf_bloque + desp1, nbytes);
+        } else {
+            memset(buf_original, 0, nbytes); // hueco
+        }
+        nbytesLeidos = nbytes;
+    } else {
+        // -------- Primer bloque --------
+        nbfisico = traducir_bloque_inodo(ninodo, primerBL, 0);
+        int tam = BLOCKSIZE - desp1;
+        if (nbfisico != -1) {
+            if (bread(nbfisico, buf_bloque) == -1) return -1;
+            memcpy(buf_original, buf_bloque + desp1, tam);
+        } else {
+            memset(buf_original, 0, tam);
+        }
+        nbytesLeidos += tam;
+
+        // -------- Bloques intermedios --------
+        for (unsigned int i = primerBL + 1; i < ultimoBL; i++) {
+            nbfisico = traducir_bloque_inodo(ninodo, i, 0);
+            if (nbfisico != -1) {
+                if (bread(nbfisico, buf_original + nbytesLeidos) == -1) return -1;
+            } else {
+                memset(buf_original + nbytesLeidos, 0, BLOCKSIZE);
+            }
+            nbytesLeidos += BLOCKSIZE;
+        }
+
+        // -------- Último bloque --------
+        nbfisico = traducir_bloque_inodo(ninodo, ultimoBL, 0);
+        int resto = desp2 + 1;
+        if (nbfisico != -1) {
+            if (bread(nbfisico, buf_bloque) == -1) return -1;
+            memcpy(buf_original + nbytesLeidos, buf_bloque, resto);
+        } else {
+            memset(buf_original + nbytesLeidos, 0, resto);
+        }
+        nbytesLeidos += resto;
+    }
+
+    // Actualizar atime
+    inodo.atime = time(NULL);
+    if (escribir_inodo(ninodo, &inodo) == -1) return -1;
+
+    return nbytesLeidos;
+}
 
 int mi_stat_f(unsigned int ninodo, struct STAT *p_stat) {
-	struct STAT inodo;
+	struct inodo inodo;
 	if(leer_inodo(ninodo, &inodo) == FALLO) {
 		fprintf(stderr, RED "Error al leer el inodo en mi_stat_f\n" RESET);
 		return FALLO;
 	}
+
 
 	p_stat->tipo = inodo.tipo;
 	p_stat->permisos = inodo.permisos;
@@ -133,7 +211,7 @@ int mi_stat_f(unsigned int ninodo, struct STAT *p_stat) {
 	p_stat->mtime = inodo.mtime;
 	p_stat->ctime = inodo.ctime;
 	p_stat->nlinks = inodo.nlinks;
-	p_stat->tamEnBytes = inodo.tamEnBytesLog;
+	p_stat->tamEnBytesLog = inodo.tamEnBytesLog;
 	p_stat->numBloquesOcupados = inodo.numBloquesOcupados;
 
 	return EXITO;

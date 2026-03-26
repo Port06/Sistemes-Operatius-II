@@ -1,6 +1,5 @@
 //Archivo fichero_basico.c
 
-#include "bloques.h"
 #include "ficheros_basico.h"
 #include <time.h>
 #include <limits.h>
@@ -433,23 +432,23 @@ int reservar_inodo(unsigned char tipo, unsigned char permisos) {
 }
 
 //Funcion para calcular el rango necessario de 0 a 3 (capacidad maxima) 
-int obtener_nRangoBL (struct inodo *inodo, unsigned int nblogico, unsigned int *ptr) {
+int obtener_nRangoBL (struct inodo inodo, unsigned int nblogico, unsigned int *ptr) {
 
 
     if (nblogico<DIRECTOS) {  // <12
-        *ptr=inodo->punterosDirectos[nblogico];   
+        *ptr=inodo.punterosDirectos[nblogico];   
 		return 0;  
 	}
     else if (nblogico<INDIRECTOS0) {  // <268    
-        *ptr=inodo->punterosIndirectos[0] ;       
+        *ptr=inodo.punterosIndirectos[0] ;       
         return 1;
     }
     else if (nblogico<INDIRECTOS1) { // <65.804     
-        *ptr=inodo->punterosIndirectos[1];            
+        *ptr=inodo.punterosIndirectos[1];            
         return 2;
 	}
     else if (nblogico<INDIRECTOS2) { // <16.843.020              
-        *ptr=inodo->punterosIndirectos[2];               
+        *ptr=inodo.punterosIndirectos[2];               
         return 3;
     }
     else {          
@@ -497,7 +496,7 @@ int traducir_bloque_inodo(unsigned int ninodo, unsigned int nblogico, unsigned c
 	salvar_inodo = 0;
 	indice = 0;
 	leer_inodo(ninodo, &inodo);
-	nRangoBL = obtener_nRangoBL(&inodo, nblogico, &ptr); //0:D, 1:I0, 2:I1, 3:I2
+	nRangoBL = obtener_nRangoBL(inodo, nblogico, &ptr); //0:D, 1:I0, 2:I1, 3:I2
 	nivel_punteros = nRangoBL; //El nivel_punteros +alto es el que cuelga directamente del inodo
 
     if (nRangoBL == 0) { //Caso punteros Directos
@@ -607,14 +606,14 @@ int liberar_bloques_inodo(unsigned int primerBL, struct inodo *inodo) {
 		ultimoBL = (inodo->tamEnBytesLog - 1) / BLOCKSIZE;
 	}
 
-    nRangoBL = obtener_nRangoBL(inodo, nBL, &ptr);
+    nRangoBL = obtener_nRangoBL(*inodo, nBL, &ptr);
 
     if  (nRangoBL == 0) {
         liberados += liberar_directos(&nBL, ultimoBL, inodo, &eof);
     }
 
     while (!eof) {
-        nRangoBL = obtener_nRangoBL(inodo, nBL, &ptr);
+        nRangoBL = obtener_nRangoBL(*inodo, nBL, &ptr);
         nivel_punteros = nRangoBL;
 
         liberados += liberar_indirectos_recursivo(&nBL, primerBL, ultimoBL, inodo, 

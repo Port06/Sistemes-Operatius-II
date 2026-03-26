@@ -3,6 +3,7 @@
 #include <string.h>
 #include <unistd.h>   // write()
 #include "ficheros.h"
+#include "ficheros_basico.h"
 
 int main(int argc, char **argv){
 

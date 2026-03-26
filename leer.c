@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "ficheros.h"
+#include "ficheros_basico.h"
 
 int main(int argc, char **argv){
 
