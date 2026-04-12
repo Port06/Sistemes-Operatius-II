@@ -22,16 +22,16 @@ int tamMB(unsigned int nbloques) {
 
 //Metodo para calcular el tamano en boloques de array de inodos
 int tamAI(unsigned int ninodos) {
-	int tamAI = 0;
-	
 	//Se calcula el numero de bloques para el array inodos en fraccion
-	tamAI = (ninodos * INODOSIZE) / BLOCKSIZE; 
-	
+    int tamAI = (ninodos * INODOSIZE) / BLOCKSIZE;
+
 	//Luego de incrementa el numero de bolques en 1 si la division no es exacta
-	if (((ninodos / 8) % BLOCKSIZE) != 0) tamAI++;
-	
-	return tamAI;
-};
+    if (((ninodos * INODOSIZE) % BLOCKSIZE) != 0) {
+        tamAI++;
+    }
+
+    return tamAI;
+}
 
 //Metodo que inizializa a los bits del los metadatos
 int initMB() {
@@ -537,7 +537,7 @@ int traducir_bloque_inodo(unsigned int ninodo, unsigned int nblogico, unsigned c
 			fprintf(stderr, "reservado bloque datos (directo): %u\n", ptr);
 			inodo.numBloquesOcupados++;
 			inodo.ctime = time(NULL);
-			inodo.punterosDirectos[nblogico] = ptr; //Se asigna la direción del bloque de datos en el inodo
+			inodo.punterosDirectos[obtener_indice(nblogico, 0)] = ptr; //Se asigna la direción del bloque de datos en el inodo
 			salvar_inodo = 1;
         };
     }  
@@ -545,9 +545,9 @@ int traducir_bloque_inodo(unsigned int ninodo, unsigned int nblogico, unsigned c
         while (nivel_punteros>0) { //Iterar para cada nivel de punteros indirectos
             if (ptr == 0) { //No cuelgan bloques de punteros
 				if (reservar == 0) return FALLO; //Error bloque a no imprimir por pantalla
+				fprintf(stderr, "reservado bloque de punteros (nivel %d): %u\n", nivel_punteros, ptr);	
 				//Reservar bloques de punteros y crear enlaces desde el inodo hasta el bloque de datos
-				ptr = reservar_bloque(); //Reservacion de bloque de punteros
-				fprintf(stderr, "reservado bloque de punteros (nivel %d): %u\n", nivel_punteros, ptr);				
+				ptr = reservar_bloque(); //Reservacion de bloque de punteros			
 				inodo.numBloquesOcupados++;
 				inodo.ctime = time(NULL); //Fecha actual
 				salvar_inodo = 1;
