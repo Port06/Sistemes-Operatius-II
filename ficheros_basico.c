@@ -545,9 +545,9 @@ int traducir_bloque_inodo(unsigned int ninodo, unsigned int nblogico, unsigned c
         while (nivel_punteros>0) { //Iterar para cada nivel de punteros indirectos
             if (ptr == 0) { //No cuelgan bloques de punteros
 				if (reservar == 0) return FALLO; //Error bloque a no imprimir por pantalla
-				fprintf(stderr, "reservado bloque de punteros (nivel %d): %u\n", nivel_punteros, ptr);	
 				//Reservar bloques de punteros y crear enlaces desde el inodo hasta el bloque de datos
-				ptr = reservar_bloque(); //Reservacion de bloque de punteros			
+				ptr = reservar_bloque(); //Reservacion de bloque de punteros
+				fprintf(stderr, "reservado bloque de punteros (nivel %d): %u\n", nivel_punteros, ptr);				
 				inodo.numBloquesOcupados++;
 				inodo.ctime = time(NULL); //Fecha actual
 				salvar_inodo = 1;
