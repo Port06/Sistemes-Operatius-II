@@ -7,7 +7,7 @@ int main(int argc, char **argv){
     char *nombreArchivo = argv[1];
 
     if(argc != 2) {
-        perror("Error, faltan o sobran argumentos: $ ./leer_sf <nombre_dispositivo>");
+        fprintf(stderr, "Sintaxis: ./leer_sf <disco>\n");
         return FALLO;
     } 
 
@@ -43,6 +43,7 @@ int main(int argc, char **argv){
 	struct inodo inodo;
 	int ninodo = 0;
 
+	/*
 	leer_inodo(ninodo, &inodo);
 	ts = localtime(&inodo.atime);
 	strftime(atime, sizeof(atime), "%a %Y-%m-%d %H:%M:%S", ts);
@@ -51,6 +52,10 @@ int main(int argc, char **argv){
 	ts = localtime(&inodo.ctime);
 	strftime(ctime, sizeof(ctime), "%a %Y-%m-%d %H:%M:%S", ts);
 	ts = localtime(&inodo.btime);
-	strftime(ctime, sizeof(btime), "%a %Y-%m-%d %H:%M:%S", ts);
+	strftime(btime, sizeof(btime), "%a %Y-%m-%d %H:%M:%S", ts);
 	printf("ID: %d ATIME: %s MTIME: %s CTIME: %s BTIME: %s\\n",ninodo,atime,mtime,ctime, btime);
+	*/
+	
+	bumount();
+	return EXITO;
 }
