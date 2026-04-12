@@ -53,7 +53,7 @@ int main(int argc, char **argv){
         total_leidos += leidos;
         
         // Avanzar offset
-        offset += tambuffer;
+        offset += leidos;
         
         // Limpiar buffer antes de la siguiente lectura
         memset(buffer_texto, 0, tambuffer);
