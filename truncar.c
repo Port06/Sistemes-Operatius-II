@@ -18,16 +18,16 @@ int main(int argc, char **argv){
     }
 
     // Obtener estado antes
-struct STAT stat;
-mi_stat_f(atoi(argv[2]), &stat);
-// Mostrar valores antes...
+	struct STAT stat;
+	mi_stat_f(atoi(argv[2]), &stat);
+	// Mostrar valores antes...
 
-// Hacer truncar/liberar
+	// Hacer truncar/liberar
 
-// Obtener estado después
-mi_stat_f(atoi(argv[2]), &stat);
-// Mostrar valores después para verificar
+	// Obtener estado después
+	mi_stat_f(atoi(argv[2]), &stat);
+	// Mostrar valores después para verificar
 
-printf("tamEnBytesLog: %d\n", stat.tamEnBytesLog);
-printf("numBloquesOcupados: %d\n", stat.numBloquesOcupados);
+	printf("tamEnBytesLog: %d\n", stat.tamEnBytesLog);
+	printf("numBloquesOcupados: %d\n", stat.numBloquesOcupados);
 }
