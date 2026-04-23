@@ -643,7 +643,7 @@ int liberar_bloques_inodo(unsigned int primerBL, struct inodo *inodo) {
 
     if (inodo->tamEnBytesLog == 0) return 0; // el fichero está vacío
 
-	// obtenemos el último bloque lógico del inodo
+	// obtenemos el último bloque lógico del inodof
 	if (inodo->tamEnBytesLog % BLOCKSIZE == 0) {		
 		ultimoBL = (inodo->tamEnBytesLog - 1) / BLOCKSIZE;
 	}

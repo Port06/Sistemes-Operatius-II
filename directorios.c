@@ -149,3 +149,80 @@ int buscar_entrada(const char *camino_parcial, unsigned int *p_inodo_dir, unsign
         return buscar_entrada(final, p_inodo_dir, p_inodo, p_entrada, reservar, permisos);
     }	
 };
+
+int mi_creat(const char *camino, unsigned char permisos) {
+    unsigned int p_inodo_dir = 0; // Raíz
+    unsigned int p_inodo;
+    unsigned int p_entrada;
+
+    int error = buscar_entrada(camino, &p_inodo_dir, &p_inodo, &p_entrada, 1, permisos);
+
+    if (error < 0) {
+        mostrar_error_buscar_entrada(error); // Opcional
+        return FALLO;
+    }
+
+    return EXITO;
+};
+
+int mi_chmod(const char *camino, unsigned char permisos) {
+    unsigned int p_inodo_dir = 0;
+    unsigned int p_inodo;
+    unsigned int p_entrada;
+
+    int error = buscar_entrada(camino, &p_inodo_dir, &p_inodo, &p_entrada, 0, permisos);
+
+    if (error < 0) return FALLO;
+
+    return mi_chmod_f(p_inodo, permisos);
+};
+
+int mi_stat(const char *camino, struct STAT *p_stat) {
+    unsigned int p_inodo_dir = 0;
+    unsigned int p_inodo;
+    unsigned int p_entrada;
+
+    int error = buscar_entrada(camino, &p_inodo_dir, &p_inodo, &p_entrada, 0, 0);
+
+    if (error < 0) return FALLO;
+
+    return mi_stat_f(p_inodo, p_stat);
+};
+
+int mi_dir(const char *camino, char *buffer) {
+
+    unsigned int p_inodo_dir = 0;
+    unsigned int p_inodo;
+    unsigned int p_entrada;
+
+    struct inodo inodo;
+    struct entrada entrada;
+
+    buffer[0] = '\0';
+
+    int error = buscar_entrada(camino, &p_inodo_dir, &p_inodo, &p_entrada, 0, 0);
+    if (error < 0) return FALLO;
+
+    leer_inodo(p_inodo, &inodo);
+
+    // Comprobar que es directorio
+    if (inodo.tipo != 'd') {
+        return FALLO;
+    }
+
+    // Comprobar permisos lectura
+    if (!(inodo.permisos & 4)) {
+        return FALLO;
+    }
+
+    int nentradas = inodo.tamEnBytesLog / sizeof(struct entrada);
+
+    for (int i = 0; i < nentradas; i++) {
+        mi_read_f(p_inodo, &entrada, i * sizeof(struct entrada), sizeof(struct entrada));
+
+        strcat(buffer, entrada.nombre);
+        strcat(buffer, "\n"); // o '|'
+    }
+
+    return nentradas;
+};

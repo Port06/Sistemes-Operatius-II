@@ -33,6 +33,8 @@ int main(int argc, char **argv){
     printf("totBloques = %d\n", SB.totBloques);
     printf("totInodos = %d\n\n", SB.totInodos);
 
+	// Codigo explicitamente no preguntado para esta entrega 1
+	
 	struct tm *ts;
 	char atime[80];
 	char mtime[80];
@@ -43,7 +45,7 @@ int main(int argc, char **argv){
 	struct inodo inodo;
 	int ninodo = 0;
 
-	/*
+	
 	leer_inodo(ninodo, &inodo);
 	ts = localtime(&inodo.atime);
 	strftime(atime, sizeof(atime), "%a %Y-%m-%d %H:%M:%S", ts);
@@ -54,7 +56,7 @@ int main(int argc, char **argv){
 	ts = localtime(&inodo.btime);
 	strftime(btime, sizeof(btime), "%a %Y-%m-%d %H:%M:%S", ts);
 	printf("ID: %d ATIME: %s MTIME: %s CTIME: %s BTIME: %s\\n",ninodo,atime,mtime,ctime, btime);
-	*/
+	
 	
 	bumount();
 	return EXITO;
