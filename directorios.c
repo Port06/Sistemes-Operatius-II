@@ -1,5 +1,13 @@
 #include <directorios.h>
 
+
+// Variables cache para no bubscar mismas direcciones al escribir repetidamente en el mismo fichero
+static struct {
+    char camino[1024];
+    int p_inodo;
+} 
+UltimaEntradaEscritura = {"", -1};
+
 int extraer_camino(const char *camino, char *inicial, char *final, char *tipo) {
 	if (*camino != '/') {
 		fprintf(stderr, RED "Error al escribir la ruta, debe empezar con '/'" RESET);
@@ -226,3 +234,39 @@ int mi_dir(const char *camino, char *buffer) {
 
     return nentradas;
 };
+
+int mi_write(const char *camino, const void *buf, unsigned int offset, unsigned int nbytes) {
+
+    unsigned int p_inodo_dir = 0;
+    unsigned int p_inodo = 0;
+    unsigned int p_entrada = 0;
+
+    // Si es el mismo camino no buscamos otra vez
+	if (strcmp(UltimaEntradaEscritura.camino, camino) == 0) {
+		p_inodo = UltimaEntradaEscritura.p_inodo;
+	} else {
+		int error = buscar_entrada(camino, &p_inodo_dir, &p_inodo, &p_entrada, 0, 0);
+		if (error < 0) return error;
+
+		strcpy(UltimaEntradaEscritura.camino, camino);
+		UltimaEntradaEscritura.p_inodo = p_inodo;
+	}
+
+    // Delegar a capa de ficheros
+    return mi_write_f(p_inodo, buf, offset, nbytes);
+}
+
+int mi_read(const char *camino, void *buf, unsigned int offset, unsigned int nbytes) {
+
+    unsigned int p_inodo_dir = 0;
+    unsigned int p_inodo = 0;
+    unsigned int p_entrada = 0;
+
+    // Buscar fichero
+    int error = buscar_entrada(camino, &p_inodo_dir, &p_inodo, &p_entrada, 0, 0);
+
+    if (error < 0) return error;
+
+    // Delegar a capa de ficheros
+    return mi_read_f(p_inodo, buf, offset, nbytes);
+}
