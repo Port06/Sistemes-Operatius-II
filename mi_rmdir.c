@@ -3,11 +3,10 @@
 int main(int argc, char **argv) {
 
     if (argc != 3) {
-        fprintf(stderr, "Uso: ./mi_rm <disco> </ruta>\n");
+        fprintf(stderr, "Uso: ./mi_rmdir <disco> </ruta>\n");
         return FALLO;
     }
 
-    // No borrar raíz
     if (strcmp(argv[2], "/") == 0) {
         fprintf(stderr, "Error: no se puede borrar la raiz\n");
         return FALLO;
@@ -32,9 +31,9 @@ int main(int argc, char **argv) {
 
     leer_inodo(p_inodo, &inodo);
 
-    // Solo ficheros
-    if (inodo.tipo != 'f') {
-        fprintf(stderr, "Error: no es un fichero\n");
+    // Solo directorios
+    if (inodo.tipo != 'd') {
+        fprintf(stderr, "Error: no es un directorio\n");
         bumount();
         return FALLO;
     }

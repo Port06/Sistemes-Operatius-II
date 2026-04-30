@@ -279,39 +279,39 @@ int mi_link(const char *camino1, const char *camino2){
     int p_inodo2;   
     int p_entrada2;
 
-    //obtener el numero de inodo del camino1
+    // Obtener el numero de inodo del camino1
     int error = buscar_entrada(camino1, &p_inodo_dir1, &p_inodo1, &p_entrada1, 0, 0);
     if (error < 0) return error;
-    //comprobar que tiene permisos de lectura
+    // Comprobar que tiene permisos de lectura
     struct inodo inodo1;
     leer_inodo(p_inodo1, &inodo1);
     if (!(inodo1.permisos & 4)) return ERROR_PERMISO_LECTURA;
     
-    //Camino 1 y camino 2 deben referirse a ficheros
+    // Camino 1 y camino 2 deben referirse a ficheros
     // No se permite el enlace a directorios para evitar que se creen ciclos en el grafo.
     if (inodo1.tipo != 'f') return ERROR_NO_ES_FICHERO;
 
-    //La entrada del camino2 no debe existir, la hemos de crear con buscar_entrada con reservar = 1 y permisos 6 (lectura y escritura)
+    // La entrada del camino2 no debe existir, la hemos de crear con buscar_entrada con reservar = 1 y permisos 6 (lectura y escritura)
     error = buscar_entrada(camino2, &p_inodo_dir2, &p_inodo2, &p_entrada2, 1, 6);
     if (error < 0) return error;
 
-    //leemos la entrada creada de camino2, o sea la entrada p_entrada2 de p_inodo_dir2
+    // Leemos la entrada creada de camino2, o sea la entrada p_entrada2 de p_inodo_dir2
     struct entrada entrada;
     mi_read_f(p_inodo_dir2, &entrada, p_entrada2 * sizeof(struct entrada), sizeof(struct entrada));
 
-    //Creamos el enlace, asociamos a esta entrada el mismo inodo que al asociado a la entrada del camino1, es decir p_inodo1
+    // Creamos el enlace, asociamos a esta entrada el mismo inodo que al asociado a la entrada del camino1, es decir p_inodo1
     entrada.ninodo = p_inodo1;
 
-    //Escribimos la entrada modificada en p_inodo_dir2
+    // Escribimos la entrada modificada en p_inodo_dir2
     if (mi_write_f(p_inodo_dir2, &entrada, p_entrada2 * sizeof(struct entrada), sizeof(struct entrada)) == FALLO) {
         liberar_inodo(entrada.ninodo); // Liberar el inodo creado para camino2
         return FALLO;
     }
 
-    //Liberamos el inodo que se ha asociado a la entrada creada, p_inodo2.
+    // Liberamos el inodo que se ha asociado a la entrada creada, p_inodo2.
     liberar_inodo(p_inodo2);
 
-    //Incrementamos la cantidad de enlaces (nlinks) de p_inodo1, actualizamos el ctime y lo salvamos.
+    // Incrementamos la cantidad de enlaces (nlinks) de p_inodo1, actualizamos el ctime y lo salvamos.
     inodo1.nlinks++;
     inodo1.ctime = time(NULL);
     escribir_inodo(p_inodo1, &inodo1);
@@ -324,31 +324,31 @@ int mi_unlink(const char *camino){
     unsigned int p_inodo_dir = 0;
     unsigned int p_inodo;
     unsigned int p_entrada;
-    //Comprobar que la entrada existe y obtener p_entrada y p_inodo con la funcion buscar_entrada con reservar = 0
+    // Comprobar que la entrada existe y obtener p_entrada y p_inodo con la funcion buscar_entrada con reservar = 0
     int error = buscar_entrada(camino, &p_inodo_dir, &p_inodo, &p_entrada, 0, 0);
     if (error < 0) return error;
 
-    //leer el inodo, 
+    // Leer el inodo, 
     struct inodo inodo;
     leer_inodo(p_inodo, &inodo);
     if(inodo.tamEnBytesLog == 0) {
         fprintf(stderr, RED "Error: el fichero ya está vacío\n" RESET);
         return FALLO;
     }
-    //comprobamos el numero de entradas que tiene
+    // Comprobamos el numero de entradas que tiene
     int nentradas = inodo.tamEnBytesLog/sizeof(struct entrada);
 
     if(p_entrada ==  nentradas -1){
-        //truncar el inodo a su tamaño menos el tamaño de una entrada
+        // Truncar el inodo a su tamaño menos el tamaño de una entrada
         mi_truncar_f(p_inodo, inodo.tamEnBytesLog - sizeof(struct entrada));
     }else{
-        //sobrescribir la entrada a eliminar con la última entrada del directorio
+        // Sobrescribir la entrada a eliminar con la última entrada del directorio
         struct entrada ultima_entrada;
         mi_read_f(p_inodo_dir, &ultima_entrada, (nentradas - 1) * sizeof(struct entrada), sizeof(struct entrada));
         if (mi_write_f(p_inodo_dir, &ultima_entrada, p_entrada * sizeof(struct entrada), sizeof(struct entrada)) == FALLO) {
             return FALLO;
         }
-        //truncar el inodo a su tamaño menos el tamaño de una entrada
+        // Truncar el inodo a su tamaño menos el tamaño de una entrada
         mi_truncar_f(p_inodo, inodo.tamEnBytesLog - sizeof(struct entrada));
 
     }
