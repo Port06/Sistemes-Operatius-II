@@ -318,3 +318,49 @@ int mi_link(const char *camino1, const char *camino2){
 
     return EXITO;
 }
+
+int mi_unlink(const char *camino){
+    
+    unsigned int p_inodo_dir = 0;
+    unsigned int p_inodo;
+    unsigned int p_entrada;
+    //Comprobar que la entrada existe y obtener p_entrada y p_inodo con la funcion buscar_entrada con reservar = 0
+    int error = buscar_entrada(camino, &p_inodo_dir, &p_inodo, &p_entrada, 0, 0);
+    if (error < 0) return error;
+
+    //leer el inodo, 
+    struct inodo inodo;
+    leer_inodo(p_inodo, &inodo);
+    if(inodo.tamEnBytesLog == 0) {
+        fprintf(stderr, RED "Error: el fichero ya está vacío\n" RESET);
+        return FALLO;
+    }
+    //comprobamos el numero de entradas que tiene
+    int nentradas = inodo.tamEnBytesLog/sizeof(struct entrada);
+
+    if(p_entrada ==  nentradas -1){
+        //truncar el inodo a su tamaño menos el tamaño de una entrada
+        mi_truncar_f(p_inodo, inodo.tamEnBytesLog - sizeof(struct entrada));
+    }else{
+        //sobrescribir la entrada a eliminar con la última entrada del directorio
+        struct entrada ultima_entrada;
+        mi_read_f(p_inodo_dir, &ultima_entrada, (nentradas - 1) * sizeof(struct entrada), sizeof(struct entrada));
+        if (mi_write_f(p_inodo_dir, &ultima_entrada, p_entrada * sizeof(struct entrada), sizeof(struct entrada)) == FALLO) {
+            return FALLO;
+        }
+        //truncar el inodo a su tamaño menos el tamaño de una entrada
+        mi_truncar_f(p_inodo, inodo.tamEnBytesLog - sizeof(struct entrada));
+
+    }
+
+    p_inodo.nlinks--; // Decrementar el número de enlaces del inodo
+    if(p_inodo.nlinks == 0) {
+        liberar_inodo(p_inodo); // Liberar el inodo si no tiene enlaces
+    } else {
+        inodo.ctime = time(NULL); // Actualizar el tiempo de cambio
+        escribir_inodo(p_inodo, &inodo); // Guardar los cambios en el inodo
+    }
+
+
+    
+}
