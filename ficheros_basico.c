@@ -658,9 +658,8 @@ int liberar_bloques_inodo(unsigned int primerBL, struct inodo *inodo) {
         nRangoBL = obtener_nRangoBL(*inodo, nBL, &ptr);
         nivel_punteros = nRangoBL;
 
-        liberados += liberar_indirectos_recursivo(&nBL, primerBL, ultimoBL, inodo, 
-												nRangoBL, nivel_punteros, &ptr, &eof);
-        //hace una llamada a la función recursiva para cada rama de indirectos
+        int resultado = liberar_indirectos_recursivo(&nBL, primerBL, ultimoBL, inodo, nRangoBL, nivel_punteros, &ptr, &eof);
+        liberados = liberados + resultado;
     }
 
     return liberados;
