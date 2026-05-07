@@ -1,22 +1,54 @@
 //Archivo bloques.c
 
 #include "bloques.h"
+#include "semaforo_mutex_posix.h"
 
-//Inicializacion de variables
+// Inicializacion de variables
 static int descriptor = 0;
+static sem_t *mutex;
+static unsigned int inside_sc = 0;
+
+// Metodos para los semaforos
+void mi_waitSem() {
+
+    if (!inside_sc) {
+        waitSem(mutex);
+    }
+
+    inside_sc++;
+}
+
+void mi_signalSem() {
+
+    inside_sc--;
+
+    if (!inside_sc) {
+        signalSem(mutex);
+    }
+}
 
 
-//Se crea el fichero
+// Se crea el fichero
 int bmount(const char *camino) {
-	
-	descriptor = open(camino, O_RDWR | O_CREAT, 0666);
-	
-	//Manejo de errores al abrir el descriptor
-	if (descriptor == -1) {
-		fprintf(stderr, RED "Error al abrir el descriptor\n" RESET);
-		return FALLO;
-	}
-	return descriptor;
+
+    if (!mutex) {
+
+        mutex = initSem();
+
+        if (mutex == SEM_FAILED) {
+            fprintf(stderr, RED "Error al inicializar el semáforo\n" RESET);
+            return FALLO;
+        }
+    }
+
+    descriptor = open(camino, O_RDWR | O_CREAT, 0666);
+
+    if (descriptor == -1) {
+        fprintf(stderr, RED "Error al abrir el descriptor\n" RESET);
+        return FALLO;
+    }
+
+    return descriptor;
 };
 
 //Se cierra el fichero
@@ -27,6 +59,13 @@ int bumount() {
 		fprintf(stderr, RED "Error al cerrar el dispositivo\n" RESET);
 		return FALLO;
 	}
+	
+	if (mutex) {
+		deleteSem(mutex);
+		mutex = NULL;
+		inside_sc = 0;
+	}
+	
 	return EXITO;
 };
 
