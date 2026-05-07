@@ -209,11 +209,13 @@ char leer_bit(unsigned int nbloque){
 }
 
 int reservar_bloque() {
+	mi_waitSem();
 	struct superbloque SB;
 
     //Se lee del superbloque
     if (bread(posSB, &SB) == FALLO) {
         fprintf(stderr, RED "Error al leer el superbloque\n" RESET);
+		mi_signalSem();
         return FALLO;
     }
 	cont_bread++;
@@ -221,6 +223,7 @@ int reservar_bloque() {
     //Se comprueba si quedan bloques libres
     if (SB.cantBloquesLibres == 0) {
         fprintf(stderr, RED "No quedan bloques libres\n" RESET);
+		mi_signalSem();
         return FALLO; //En caso negativo no se puede reservar un bloque
     }
 
@@ -236,6 +239,7 @@ int reservar_bloque() {
     while (nbloqueMB < (SB.posUltimoBloqueMB - SB.posPrimerBloqueMB + 1)) {
         if (bread(SB.posPrimerBloqueMB + nbloqueMB, bufferMB) == FALLO) {
             fprintf(stderr, RED "Error al leer bloque del MB\n" RESET);
+			mi_signalSem();
             return FALLO;
         }
 		cont_bread++;
@@ -269,6 +273,7 @@ int reservar_bloque() {
     //Se marca el bloque como ocupado en el megabyte
     if (escribir_bit(nbloque, 1) == FALLO) {
         fprintf(stderr, RED "Error al escribir bit en reservar_bloque\n" RESET);
+		mi_signalSem();
         return FALLO;
     }
 
@@ -276,6 +281,7 @@ int reservar_bloque() {
     SB.cantBloquesLibres--;
     if (bwrite(posSB, &SB) == FALLO) {
         fprintf(stderr, RED "Error al escribir el superbloque\n" RESET);
+		mi_signalSem();
         return FALLO;
     }
 	cont_bwrite++;
@@ -286,20 +292,24 @@ int reservar_bloque() {
 
     if (bwrite(nbloque, bufferCeros) == FALLO) {
         fprintf(stderr, RED "Error al limpiar el bloque reservado\n" RESET);
+		mi_signalSem();
         return FALLO;
     }
 	cont_bwrite++;
 
     //Se devuelve el numero del bloque reservado
+	mi_signalSem();
     return nbloque;
 }
 
 
 int liberar_bloque(unsigned int nbloque) {
+	mi_waitSem();
 	//leemos el superbloque para obtener la posicion del bloque de metadatos
 	struct superbloque SB;
 	if(bread(posSB, &SB) == FALLO) {
 		fprintf(stderr, RED "Error al leer la estructura en SB\n" RESET);
+		mi_signalSem();
 		return FALLO;
 	}
 	cont_bread++;
@@ -307,6 +317,7 @@ int liberar_bloque(unsigned int nbloque) {
 	//Escribimos el bit del bloque que queremos liberar a 0
 	if(escribir_bit(nbloque, 0) == FALLO) {
 		fprintf(stderr, RED "Error al escribir el bit en liberar_bloque\n" RESET);
+		mi_signalSem();
 		return FALLO;
 	}
 	
@@ -319,11 +330,12 @@ int liberar_bloque(unsigned int nbloque) {
 	//Escribimos el superbloque actualizado
 	if (bwrite(posSB, &SB) == FALLO) {
 		fprintf(stderr, RED "Error al escribir la estructura en SB\n" RESET);
+		mi_signalSem();
 		return FALLO;
 	}
 	cont_bwrite++;
 
-
+	mi_signalSem();
 	return nbloque;
 }
 
@@ -388,6 +400,7 @@ int leer_inodo(unsigned int ninodo, struct inodo *inodo) {
 
 //Metodo de reserva de inodo
 int reservar_inodo(unsigned char tipo, unsigned char permisos) {
+	mi_waitSem();
     struct superbloque SB;
     struct inodo inodo;
     unsigned int posInodoReservado;
@@ -395,6 +408,7 @@ int reservar_inodo(unsigned char tipo, unsigned char permisos) {
     //Se lee el superbloque
     if (bread(posSB, &SB) == FALLO) {
         fprintf(stderr, RED "Error al leer el superbloque\n" RESET);
+		mi_signalSem();
         return FALLO;
     }
 	cont_bread++;
@@ -402,12 +416,14 @@ int reservar_inodo(unsigned char tipo, unsigned char permisos) {
 	//Se comprueba de que la lista de inodos este libres
 	if (SB.posPrimerInodoLibre == UINT_MAX) {
 		fprintf(stderr, RED "Lista de inodos libres vacía\n" RESET);
+		mi_signalSem();
 		return FALLO;
 	}
 
     //Se comprueba si hay inodos libres
     if (SB.cantInodosLibres == 0) {
         fprintf(stderr, RED "No quedan inodos libres\n" RESET);
+		mi_signalSem();
         return FALLO;
     }
 
@@ -417,6 +433,7 @@ int reservar_inodo(unsigned char tipo, unsigned char permisos) {
     //Se lee ese inodo para saber cual es el siguiente libre
     if (leer_inodo(posInodoReservado, &inodo) == FALLO) {
         fprintf(stderr, RED "Error al leer el inodo libre\n" RESET);
+		mi_signalSem();
         return FALLO;
     }
 
@@ -446,6 +463,7 @@ int reservar_inodo(unsigned char tipo, unsigned char permisos) {
     //Se escribe el inodo inicializado
     if (escribir_inodo(posInodoReservado, &inodo) == FALLO) {
         fprintf(stderr, RED "Error al escribir el inodo reservado\n" RESET);
+		mi_signalSem();
         return FALLO;
     }
 
@@ -453,11 +471,13 @@ int reservar_inodo(unsigned char tipo, unsigned char permisos) {
     SB.cantInodosLibres--;
     if (bwrite(posSB, &SB) == FALLO) {
         fprintf(stderr, RED "Error al escribir el superbloque\n" RESET);
+		mi_signalSem();
         return FALLO;
     }
 	cont_bwrite++;
 
     //Se devuelve el numero del inodo reservado
+	mi_signalSem();
     return posInodoReservado;
 }
 
@@ -590,6 +610,7 @@ int traducir_bloque_inodo(unsigned int ninodo, unsigned int nblogico, unsigned c
 };
 
 int liberar_inodo(unsigned int ninodo) {
+	mi_waitSem();
 	
 	// El primer bloque siempre empieza en 0
 	unsigned int primerBL = 0;
@@ -631,6 +652,7 @@ int liberar_inodo(unsigned int ninodo) {
 	fprintf(stderr, "Total breads: %d\n", cont_bread);
 	fprintf(stderr, "Total bwrites: %d\n", cont_bwrite);
 
+	mi_signalSem();
 	return ninodo;	
 }
 

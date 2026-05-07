@@ -85,13 +85,15 @@ int bwrite(unsigned int nbloque, const void *buf) {
 	int bytes_escritos = write(descriptor, buf, BLOCKSIZE);
 	
 	//Verificamos que se hayan escrito los bytes correctos
-	if (bytes_escritos != BLOCKSIZE) {
+	if (bytes_escritos == -1) {
 		fprintf(stderr, RED "Error al escribir\n" RESET);
 		return FALLO;
-	} else if (bytes_escritos == -1) {
-        fprintf(stderr, RED "Error al verificar\n" RESET);
-        return FALLO;
-    }
+	}
+
+	if (bytes_escritos != BLOCKSIZE) {
+		fprintf(stderr, RED "Escritura incompleta\n" RESET);
+		return FALLO;
+	}
 	
 	return bytes_escritos;
 };
@@ -110,13 +112,15 @@ int bread(unsigned int nbloque, void *buf) {
 	int bytes_leidos = read(descriptor, buf, BLOCKSIZE);
 	
 	//Verificamos que se hayan leido los bytes correctos
-	if (bytes_leidos != BLOCKSIZE) {
-		fprintf(stderr, RED "Lectura incompleta\n" RESET);
-		return FALLO;
-	} else if (bytes_leidos == -1) {
+	if (bytes_leidos == -1) {
         fprintf(stderr, RED "Error al verificar\n" RESET);
         return FALLO;
     }
+	
+	if (bytes_leidos != BLOCKSIZE) {
+		fprintf(stderr, RED "Lectura incompleta\n" RESET);
+		return FALLO;
+	}
 	
 	return bytes_leidos;
 };
