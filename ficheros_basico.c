@@ -340,9 +340,12 @@ int liberar_bloque(unsigned int nbloque) {
 }
 
 int escribir_inodo(unsigned int ninodo, struct inodo *inodo) {
+	mi_waitSem();
+	
 	struct superbloque SB;
 	if(bread(posSB, &SB) == FALLO) {
 		fprintf(stderr, RED "Error al leer la estructura en SB\n" RESET);
+		mi_signalSem();
 		return FALLO;
 	}
 	cont_bread++;
@@ -354,6 +357,7 @@ int escribir_inodo(unsigned int ninodo, struct inodo *inodo) {
 
 	if(bread(nbloqueabs, inodos) == FALLO) {
 		fprintf(stderr, RED "Error al leer la estructura en AI\n" RESET);
+		mi_signalSem();
 		return FALLO;
 	}
 	cont_bread++;
@@ -363,10 +367,12 @@ int escribir_inodo(unsigned int ninodo, struct inodo *inodo) {
 
 	if(bwrite(nbloqueabs, inodos) == FALLO) {
 		fprintf(stderr, RED "Error al escribir la estructura en AI\n" RESET);
+		mi_signalSem();
 		return FALLO;
 	}
 	cont_bwrite++;
 
+	mi_signalSem();
 	return EXITO;
 }
 
@@ -657,14 +663,18 @@ int liberar_inodo(unsigned int ninodo) {
 }
 
 int liberar_bloques_inodo(unsigned int primerBL, struct inodo *inodo) {
+	mi_waitSem();
 	
 	// libera los bloques de datos e índices recorriendo los punteros desde el inodo hacia las hojas (BLs  datos)
     
     unsigned int nivel_punteros = 0, nBL = primerBL, ultimoBL, ptr = 0; 
     int nRangoBL = 0, liberados = 0, eof = 0;
 
-    if (inodo->tamEnBytesLog == 0) return 0; // el fichero está vacío
-
+    if (inodo->tamEnBytesLog == 0) {
+		mi_signalSem();
+		return 0; // el fichero está vacío
+	}
+	
 	// obtenemos el último bloque lógico del inodof
 	if (inodo->tamEnBytesLog % BLOCKSIZE == 0) {		
     ultimoBL = (inodo->tamEnBytesLog - 1) / BLOCKSIZE;
@@ -686,6 +696,7 @@ int liberar_bloques_inodo(unsigned int primerBL, struct inodo *inodo) {
         liberados = liberados + resultado;
     }
 
+	mi_signalSem();
     return liberados;
 };
 
