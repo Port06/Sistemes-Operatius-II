@@ -1,4 +1,4 @@
-#include "ficheros_basico.h"
+#include "ficheros_basico.h" 
 #include <time.h>
 
 int main(int argc, char **argv){

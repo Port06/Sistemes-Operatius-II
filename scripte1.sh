@@ -1,4 +1,4 @@
-# Adelaida
+# Adelaida.
 # scripte1.sh
 
 clear
