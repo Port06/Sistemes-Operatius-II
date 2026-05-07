@@ -1,5 +1,7 @@
-#include <directorios.h>
-
+#include "directorios.h"
+#include "bloques.h"
+#include "ficheros_basico.h"
+#include <stdio.h>
 
 // Variables cache para no bubscar mismas direcciones al escribir repetidamente en el mismo fichero
 static struct {
@@ -43,7 +45,7 @@ int extraer_camino(const char *camino, char *inicial, char *final, char *tipo) {
 
 
 int buscar_entrada(const char *camino_parcial, unsigned int *p_inodo_dir, unsigned int *p_inodo, unsigned int *p_entrada, char reservar, unsigned char permisos) {
-	
+	struct superbloque SB;
     struct entrada entrada;
     struct inodo inodo_dir;
 
@@ -289,7 +291,7 @@ int mi_link(const char *camino1, const char *camino2){
     
     // Camino 1 y camino 2 deben referirse a ficheros
     // No se permite el enlace a directorios para evitar que se creen ciclos en el grafo.
-    if (inodo1.tipo != 'f') return ERROR_NO_ES_FICHERO;
+    if (inodo1.tipo != 'f') return FALLO;
 
     // La entrada del camino2 no debe existir, la hemos de crear con buscar_entrada con reservar = 1 y permisos 6 (lectura y escritura)
     error = buscar_entrada(camino2, &p_inodo_dir2, &p_inodo2, &p_entrada2, 1, 6);
@@ -324,13 +326,14 @@ int mi_unlink(const char *camino){
     unsigned int p_inodo_dir = 0;
     unsigned int p_inodo;
     unsigned int p_entrada;
-    // Comprobar que la entrada existe y obtener p_entrada y p_inodo con la funcion buscar_entrada con reservar = 0
-    int error = buscar_entrada(camino, &p_inodo_dir, &p_inodo, &p_entrada, 0, 0);
-    if (error < 0) return error;
-
-    // Leer el inodo, 
     struct inodo inodo;
     leer_inodo(p_inodo, &inodo);
+
+    // Comprobar que la entrada existe y obtener p_entrada y p_inodo con la funcion buscar_entrada con reservar = 0
+    p_inodo = buscar_entrada(camino, &p_inodo_dir, &p_inodo, &p_entrada, 0, 0);
+    if (p_inodo < 0) return FALLO;
+
+    // Leer el inodo, 
     if(inodo.tamEnBytesLog == 0) {
         fprintf(stderr, RED "Error: el fichero ya está vacío\n" RESET);
         return FALLO;
@@ -353,8 +356,8 @@ int mi_unlink(const char *camino){
 
     }
 
-    p_inodo.nlinks--; // Decrementar el número de enlaces del inodo
-    if(p_inodo.nlinks == 0) {
+    inodo.nlinks--; // Decrementar el número de enlaces del inodo
+    if(inodo.nlinks == 0) {
         liberar_inodo(p_inodo); // Liberar el inodo si no tiene enlaces
     } else {
         inodo.ctime = time(NULL); // Actualizar el tiempo de cambio
