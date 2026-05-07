@@ -645,7 +645,9 @@ int liberar_bloques_inodo(unsigned int primerBL, struct inodo *inodo) {
 
 	// obtenemos el último bloque lógico del inodof
 	if (inodo->tamEnBytesLog % BLOCKSIZE == 0) {		
-		ultimoBL = (inodo->tamEnBytesLog - 1) / BLOCKSIZE;
+    ultimoBL = (inodo->tamEnBytesLog - 1) / BLOCKSIZE;
+	} else {
+		ultimoBL = inodo->tamEnBytesLog / BLOCKSIZE;
 	}
 
     nRangoBL = obtener_nRangoBL(*inodo, nBL, &ptr);
