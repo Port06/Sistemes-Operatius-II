@@ -169,8 +169,12 @@ int mi_creat(const char *camino, unsigned char permisos) {
     int error = buscar_entrada(camino, &p_inodo_dir, &p_inodo, &p_entrada, 1, permisos);
 
     if (error < 0) {
+<<<<<<< HEAD
         mostrar_error_buscar_entrada(error); // Opcional
 		mi_signalSem();
+=======
+        //mostrar_error_buscar_entrada(error); // Opcional
+>>>>>>> 7dfe881 (no errors compilacio (falten warnings))
         return FALLO;
     }
 
@@ -301,10 +305,14 @@ int mi_link(const char *camino1, const char *camino2){
     
     // Camino 1 y camino 2 deben referirse a ficheros
     // No se permite el enlace a directorios para evitar que se creen ciclos en el grafo.
+<<<<<<< HEAD
     if (inodo1.tipo != 'f') {
 		mi_signalSem();
 		return FALLO;
 	}
+=======
+    if (inodo1.tipo != 'f') return FALLO;
+>>>>>>> 7dfe881 (no errors compilacio (falten warnings))
 
     // La entrada del camino2 no debe existir, la hemos de crear con buscar_entrada con reservar = 1 y permisos 6 (lectura y escritura)
     error = buscar_entrada(camino2, &p_inodo_dir2, &p_inodo2, &p_entrada2, 1, 6);
@@ -350,11 +358,16 @@ int mi_unlink(const char *camino){
 
     // Comprobar que la entrada existe y obtener p_entrada y p_inodo con la funcion buscar_entrada con reservar = 0
     p_inodo = buscar_entrada(camino, &p_inodo_dir, &p_inodo, &p_entrada, 0, 0);
+<<<<<<< HEAD
     if (p_inodo < 0) {
 		mi_signalSem();
 		return FALLO;
 	}
 	
+=======
+    if (p_inodo < 0) return FALLO;
+
+>>>>>>> 7dfe881 (no errors compilacio (falten warnings))
     // Leer el inodo, 
     if(inodo.tamEnBytesLog == 0) {
         fprintf(stderr, RED "Error: el fichero ya está vacío\n" RESET);

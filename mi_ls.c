@@ -1,4 +1,7 @@
 #include "directorios.h"
+#include "bloques.h"
+#include <stdio.h>
+#include <string.h>
 
 int main(int argc, char **argv) {
 
@@ -22,7 +25,7 @@ int main(int argc, char **argv) {
     bmount(argv[flag_l ? 2 : 1]);
 
     // Pedir listado
-    int n = mi_dir(camino, buffer, flag_l);
+    int n = mi_dir(camino, buffer);
 
     if (n < 0) {
         fprintf(stderr, "Error al listar\n");

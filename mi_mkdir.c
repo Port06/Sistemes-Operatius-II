@@ -1,4 +1,7 @@
 #include "directorios.h"
+#include "bloques.h"
+#include <stdio.h>
+
 
 int main(int argc, char **argv) {
 
