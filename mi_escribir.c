@@ -10,8 +10,16 @@ int main(int argc, char **argv) {
     }
 
     int offset = atoi(argv[4]);
+    int l = strlen(argv[3]);
+    
 
-    bmount(argv[1]);
+    fprintf(stderr, "longitud texto: %d \n", l);
+
+    if(bmount(argv[1]) == FALLO) {
+        fprintf(stderr, RED "Error al montar el dispositivo\n" RESET);
+        return FALLO;
+    }
+
 
     // escribir texto en el fichero
     int escritos = mi_write(argv[2], argv[3], offset, strlen(argv[3]));
@@ -24,6 +32,8 @@ int main(int argc, char **argv) {
 
     printf("Bytes escritos: %d\n", escritos);
 
-    bumount();
+    if (bumount() == FALLO) {
+        return FALLO;
+    }
     return EXITO;
 }
