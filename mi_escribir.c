@@ -22,7 +22,7 @@ int main(int argc, char **argv) {
 
 
     // escribir texto en el fichero
-    int escritos = mi_write(argv[2], argv[3], offset, strlen(argv[3]));
+    int escritos = mi_write(argv[2], argv[3], offset, l);
 
     if (escritos < 0) {
         fprintf(stderr, "Error al escribir\n");

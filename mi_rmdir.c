@@ -1,4 +1,6 @@
 #include "directorios.h"
+#include <stdio.h>
+#include "ficheros_basico.h"
 
 int main(int argc, char **argv) {
 
