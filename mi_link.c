@@ -20,7 +20,7 @@ int main(int argc, char **argv) {
     int error = mi_link(argv[2], argv[3]);
 
     if (error < 0) {
-        fprintf(stderr, "Error al crear enlace\n", error);
+        fprintf(stderr, "Error al crear enlace\n");
         bumount();
         return FALLO;
     }
