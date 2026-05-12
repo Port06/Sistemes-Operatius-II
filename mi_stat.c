@@ -10,17 +10,18 @@ int main(int argc, char **argv) {
     }
 
     struct STAT stat;
-
+    int p_inodo;
     bmount(argv[1]);
 
     // Obtener datos del inodo
-    if (mi_stat(argv[2], &stat) < 0) {
+    if ((p_inodo = mi_stat(argv[2], &stat)) < 0) {
         fprintf(stderr, "Error al obtener stat\n");
         bumount();
         return FALLO;
     }
 
     // Imprimir info básica
+    printf("no inodo %d\n", p_inodo);
     printf("tipo: %c\n", stat.tipo);
     printf("permisos: %d\n", stat.permisos);
     printf("atime: %ld\n", stat.atime);

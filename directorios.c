@@ -344,50 +344,62 @@ int mi_link(const char *camino1, const char *camino2){
     return EXITO;
 }
 
-int mi_unlink(const char *camino){
-	mi_waitSem();
+int mi_unlink(const char *camino) {
+    mi_waitSem();
+
+    struct superbloque SB;
+    unsigned int p_inodo_dir = 0, p_inodo = 0, p_entrada = 0;
     
-    unsigned int p_inodo_dir = 0;
-    unsigned int p_inodo;
-    unsigned int p_entrada;
+    bread(posSB, &SB);
+
+    // 1. Buscamos la entrada
+    int error = buscar_entrada(camino, &p_inodo_dir, &p_inodo, &p_entrada, 0, 0);
+    if (error < 0) return error; // Error si no existe
+
+    // 2. Leemos el inodo del fichero/directorio a borrar
     struct inodo inodo;
-    leer_inodo(p_inodo, &inodo);
+    if (leer_inodo(p_inodo, &inodo) == FALLO) return FALLO;
 
-    // Comprobar que la entrada existe y obtener p_entrada y p_inodo con la funcion buscar_entrada con reservar = 0
-    p_inodo = buscar_entrada(camino, &p_inodo_dir, &p_inodo, &p_entrada, 0, 0);
-    if (p_inodo < 0) return FALLO;
-
-    leer_inodo(p_inodo, &inodo);
-
-    // Leer el inodo, 
-    if(inodo.tamEnBytesLog == 0) {
-        fprintf(stderr, RED "Error: el fichero ya está vacío\n" RESET);
+    // Si es un directorio, debe estar vacío para poder borrarlo
+    if ((inodo.tipo == 'd') && (inodo.tamEnBytesLog > 0)) {
+        fprintf(stderr, "Error: El directorio no está vacío\n");
         return FALLO;
     }
-    // Comprobamos el numero de entradas que tiene
-    int nentradas = inodo.tamEnBytesLog/sizeof(struct entrada);
 
-    if(p_entrada <  (nentradas -1)){
+    // 3. Gestionar los enlaces (nlinks)
+    inodo.nlinks--;
+    if (inodo.nlinks > 0) {
+        // Aún quedan enlaces: actualizamos ctime y guardamos el inodo
+        inodo.ctime = time(NULL);
+        if (escribir_inodo(p_inodo, &inodo) == FALLO) return FALLO;
+    } else {
+        // No quedan enlaces: liberamos el inodo y sus bloques
+        if (liberar_inodo(p_inodo) == FALLO) return FALLO;
+    }
 
-        // Sobrescribir la entrada a eliminar con la última entrada del directorio
+    // 4. Eliminar la entrada del directorio padre
+    struct inodo inodo_padre;
+    if (leer_inodo(p_inodo_dir, &inodo_padre) == FALLO) return FALLO;
+
+    int num_entradas = inodo_padre.tamEnBytesLog / sizeof(struct entrada);
+
+    // Si la entrada que borramos no es la última, la sustituimos por la última
+    if (p_entrada < num_entradas - 1) {
         struct entrada ultima_entrada;
-        mi_read_f(p_inodo_dir, &ultima_entrada, (nentradas - 1) * sizeof(struct entrada), sizeof(struct entrada));
+        // Leemos la última entrada
+        if (mi_read_f(p_inodo_dir, &ultima_entrada, (num_entradas - 1) * sizeof(struct entrada), sizeof(struct entrada)) == FALLO) {
+            return FALLO;
+        }
+        // La escribimos en la posición de la entrada borrada
         if (mi_write_f(p_inodo_dir, &ultima_entrada, p_entrada * sizeof(struct entrada), sizeof(struct entrada)) == FALLO) {
             return FALLO;
         }
-        // Truncar el inodo a su tamaño menos el tamaño de una entrada
-        mi_truncar_f(p_inodo, inodo.tamEnBytesLog - sizeof(struct entrada));
-
-    struct inodo i;
-    leer_inodo(p_inodo, &i);
-    i.nlinks--; // Decrementar el número de enlaces del inodo
-    if(i.nlinks == 0) {
-        liberar_inodo(p_inodo); // Liberar el inodo si no tiene enlaces
-    } else {
-        i.ctime = time(NULL); // Actualizar el tiempo de cambio
-        escribir_inodo(p_inodo, &i); // Guardar los cambios en el inodo
     }
 
+    // 5. Truncamos el directorio padre para eliminar la última entrada sobrante
+    if (mi_truncar_f(p_inodo_dir, inodo_padre.tamEnBytesLog - sizeof(struct entrada)) == FALLO) {
+        return FALLO;
+    }
 
-    
+    return EXITO;
 }

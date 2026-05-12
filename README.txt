@@ -5,4 +5,5 @@ Miembros: - Loan Besnardeau Logeais
 	  - Joan Matemalas Rosselló
 -----------------------------------------
 
-	
+	IA:
+	-Retocar el unlink perque aquest no acabava de donar els valors esperats
