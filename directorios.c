@@ -169,12 +169,7 @@ int mi_creat(const char *camino, unsigned char permisos) {
     int error = buscar_entrada(camino, &p_inodo_dir, &p_inodo, &p_entrada, 1, permisos);
 
     if (error < 0) {
-<<<<<<< HEAD
-        mostrar_error_buscar_entrada(error); // Opcional
 		mi_signalSem();
-=======
-        //mostrar_error_buscar_entrada(error); // Opcional
->>>>>>> 7dfe881 (no errors compilacio (falten warnings))
         return FALLO;
     }
 
@@ -203,7 +198,11 @@ int mi_stat(const char *camino, struct STAT *p_stat) {
 
     if (error < 0) return FALLO;
 
-    return mi_stat_f(p_inodo, p_stat);
+    if(mi_stat_f(p_inodo, p_stat) < 0) {
+        return FALLO;
+    };
+
+    return p_inodo;
 };
 
 int mi_dir(const char *camino, char *buffer) {
@@ -305,14 +304,10 @@ int mi_link(const char *camino1, const char *camino2){
     
     // Camino 1 y camino 2 deben referirse a ficheros
     // No se permite el enlace a directorios para evitar que se creen ciclos en el grafo.
-<<<<<<< HEAD
     if (inodo1.tipo != 'f') {
 		mi_signalSem();
 		return FALLO;
 	}
-=======
-    if (inodo1.tipo != 'f') return FALLO;
->>>>>>> 7dfe881 (no errors compilacio (falten warnings))
 
     // La entrada del camino2 no debe existir, la hemos de crear con buscar_entrada con reservar = 1 y permisos 6 (lectura y escritura)
     error = buscar_entrada(camino2, &p_inodo_dir2, &p_inodo2, &p_entrada2, 1, 6);
@@ -325,6 +320,8 @@ int mi_link(const char *camino1, const char *camino2){
     struct entrada entrada;
     mi_read_f(p_inodo_dir2, &entrada, p_entrada2 * sizeof(struct entrada), sizeof(struct entrada));
 
+    unsigned int i_liberar = p_inodo2;
+
     // Creamos el enlace, asociamos a esta entrada el mismo inodo que al asociado a la entrada del camino1, es decir p_inodo1
     entrada.ninodo = p_inodo1;
 
@@ -336,7 +333,7 @@ int mi_link(const char *camino1, const char *camino2){
     }
 
     // Liberamos el inodo que se ha asociado a la entrada creada, p_inodo2.
-    liberar_inodo(p_inodo2);
+    liberar_inodo(i_liberar);
 
     // Incrementamos la cantidad de enlaces (nlinks) de p_inodo1, actualizamos el ctime y lo salvamos.
     inodo1.nlinks++;
@@ -358,47 +355,37 @@ int mi_unlink(const char *camino){
 
     // Comprobar que la entrada existe y obtener p_entrada y p_inodo con la funcion buscar_entrada con reservar = 0
     p_inodo = buscar_entrada(camino, &p_inodo_dir, &p_inodo, &p_entrada, 0, 0);
-<<<<<<< HEAD
-    if (p_inodo < 0) {
-		mi_signalSem();
-		return FALLO;
-	}
-	
-=======
     if (p_inodo < 0) return FALLO;
 
->>>>>>> 7dfe881 (no errors compilacio (falten warnings))
+    leer_inodo(p_inodo, &inodo);
+
     // Leer el inodo, 
     if(inodo.tamEnBytesLog == 0) {
         fprintf(stderr, RED "Error: el fichero ya está vacío\n" RESET);
-		mi_signalSem();
         return FALLO;
     }
     // Comprobamos el numero de entradas que tiene
     int nentradas = inodo.tamEnBytesLog/sizeof(struct entrada);
 
-    if(p_entrada ==  nentradas -1){
-        // Truncar el inodo a su tamaño menos el tamaño de una entrada
-        mi_truncar_f(p_inodo, inodo.tamEnBytesLog - sizeof(struct entrada));
-    }else{
+    if(p_entrada <  (nentradas -1)){
+
         // Sobrescribir la entrada a eliminar con la última entrada del directorio
         struct entrada ultima_entrada;
         mi_read_f(p_inodo_dir, &ultima_entrada, (nentradas - 1) * sizeof(struct entrada), sizeof(struct entrada));
         if (mi_write_f(p_inodo_dir, &ultima_entrada, p_entrada * sizeof(struct entrada), sizeof(struct entrada)) == FALLO) {
-			mi_signalSem();
             return FALLO;
         }
         // Truncar el inodo a su tamaño menos el tamaño de una entrada
         mi_truncar_f(p_inodo, inodo.tamEnBytesLog - sizeof(struct entrada));
 
-    }
-
-    inodo.nlinks--; // Decrementar el número de enlaces del inodo
-    if(inodo.nlinks == 0) {
+    struct inodo i;
+    leer_inodo(p_inodo, &i);
+    i.nlinks--; // Decrementar el número de enlaces del inodo
+    if(i.nlinks == 0) {
         liberar_inodo(p_inodo); // Liberar el inodo si no tiene enlaces
     } else {
-        inodo.ctime = time(NULL); // Actualizar el tiempo de cambio
-        escribir_inodo(p_inodo, &inodo); // Guardar los cambios en el inodo
+        i.ctime = time(NULL); // Actualizar el tiempo de cambio
+        escribir_inodo(p_inodo, &i); // Guardar los cambios en el inodo
     }
 
 
