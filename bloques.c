@@ -31,6 +31,17 @@ void mi_signalSem() {
 // Se crea el fichero
 int bmount(const char *camino) {
 
+    // Si ya hay un descriptor abierto lo cerramos
+    // (importante después de fork())
+    if (descriptor > 0) {
+
+        if (close(descriptor) == -1) {
+            fprintf(stderr, RED "Error al cerrar descriptor previo\n" RESET);
+            return FALLO;
+        }
+    }
+
+    // Inicializar semáforo solo una vez
     if (!mutex) {
 
         mutex = initSem();
@@ -41,6 +52,7 @@ int bmount(const char *camino) {
         }
     }
 
+    // Abrir dispositivo virtual
     descriptor = open(camino, O_RDWR | O_CREAT, 0666);
 
     if (descriptor == -1) {
@@ -49,25 +61,26 @@ int bmount(const char *camino) {
     }
 
     return descriptor;
-};
+}
 
 //Se cierra el fichero
 int bumount() {
-	
-	//Manejo e errores al cerrar el descriptor
-	if (close(descriptor) == -1) {
-		fprintf(stderr, RED "Error al cerrar el dispositivo\n" RESET);
-		return FALLO;
-	}
-	
-	if (mutex) {
-		deleteSem(mutex);
-		mutex = NULL;
-		inside_sc = 0;
-	}
-	
-	return EXITO;
-};
+
+    descriptor = close(descriptor);
+
+    if (descriptor == -1) {
+        fprintf(stderr, RED "Error al cerrar el dispositivo\n" RESET);
+        return FALLO;
+    }
+
+    if (mutex) {
+        deleteSem(mutex);
+        mutex = NULL;
+        inside_sc = 0;
+    }
+
+    return EXITO;
+}
 
 //Funcion encargada de escribir un bloque en el dispositivo virtual
 int bwrite(unsigned int nbloque, const void *buf) {
