@@ -161,6 +161,7 @@ int buscar_entrada(const char *camino_parcial, unsigned int *p_inodo_dir, unsign
 };
 
 int mi_creat(const char *camino, unsigned char permisos) {
+	mi_waitSem();
     unsigned int p_inodo_dir = 0; // Raíz
     unsigned int p_inodo;
     unsigned int p_entrada;
@@ -169,9 +170,11 @@ int mi_creat(const char *camino, unsigned char permisos) {
 
     if (error < 0) {
         mostrar_error_buscar_entrada(error); // Opcional
+		mi_signalSem();
         return FALLO;
     }
 
+	mi_signalSem();
     return EXITO;
 };
 
@@ -274,6 +277,7 @@ int mi_read(const char *camino, void *buf, unsigned int offset, unsigned int nby
 }
 
 int mi_link(const char *camino1, const char *camino2){
+	mi_waitSem();
     int p_inodo_dir1 = 0;
     int p_inodo1;
     int p_entrada1;
@@ -283,19 +287,31 @@ int mi_link(const char *camino1, const char *camino2){
 
     // Obtener el numero de inodo del camino1
     int error = buscar_entrada(camino1, &p_inodo_dir1, &p_inodo1, &p_entrada1, 0, 0);
-    if (error < 0) return error;
+    if (error < 0) {
+		mi_signalSem();
+		return error;
+	}
     // Comprobar que tiene permisos de lectura
     struct inodo inodo1;
     leer_inodo(p_inodo1, &inodo1);
-    if (!(inodo1.permisos & 4)) return ERROR_PERMISO_LECTURA;
+    if (!(inodo1.permisos & 4)) {
+		mi_signalSem();
+		return ERROR_PERMISO_LECTURA;
+	}
     
     // Camino 1 y camino 2 deben referirse a ficheros
     // No se permite el enlace a directorios para evitar que se creen ciclos en el grafo.
-    if (inodo1.tipo != 'f') return FALLO;
+    if (inodo1.tipo != 'f') {
+		mi_signalSem();
+		return FALLO;
+	}
 
     // La entrada del camino2 no debe existir, la hemos de crear con buscar_entrada con reservar = 1 y permisos 6 (lectura y escritura)
     error = buscar_entrada(camino2, &p_inodo_dir2, &p_inodo2, &p_entrada2, 1, 6);
-    if (error < 0) return error;
+    if (error < 0) {
+		mi_signalSem();
+		return error;
+	}
 
     // Leemos la entrada creada de camino2, o sea la entrada p_entrada2 de p_inodo_dir2
     struct entrada entrada;
@@ -307,6 +323,7 @@ int mi_link(const char *camino1, const char *camino2){
     // Escribimos la entrada modificada en p_inodo_dir2
     if (mi_write_f(p_inodo_dir2, &entrada, p_entrada2 * sizeof(struct entrada), sizeof(struct entrada)) == FALLO) {
         liberar_inodo(entrada.ninodo); // Liberar el inodo creado para camino2
+		mi_signalSem();
         return FALLO;
     }
 
@@ -318,10 +335,12 @@ int mi_link(const char *camino1, const char *camino2){
     inodo1.ctime = time(NULL);
     escribir_inodo(p_inodo1, &inodo1);
 
+	mi_signalSem();
     return EXITO;
 }
 
 int mi_unlink(const char *camino){
+	mi_waitSem();
     
     unsigned int p_inodo_dir = 0;
     unsigned int p_inodo;
@@ -331,11 +350,15 @@ int mi_unlink(const char *camino){
 
     // Comprobar que la entrada existe y obtener p_entrada y p_inodo con la funcion buscar_entrada con reservar = 0
     p_inodo = buscar_entrada(camino, &p_inodo_dir, &p_inodo, &p_entrada, 0, 0);
-    if (p_inodo < 0) return FALLO;
-
+    if (p_inodo < 0) {
+		mi_signalSem();
+		return FALLO;
+	}
+	
     // Leer el inodo, 
     if(inodo.tamEnBytesLog == 0) {
         fprintf(stderr, RED "Error: el fichero ya está vacío\n" RESET);
+		mi_signalSem();
         return FALLO;
     }
     // Comprobamos el numero de entradas que tiene
@@ -349,6 +372,7 @@ int mi_unlink(const char *camino){
         struct entrada ultima_entrada;
         mi_read_f(p_inodo_dir, &ultima_entrada, (nentradas - 1) * sizeof(struct entrada), sizeof(struct entrada));
         if (mi_write_f(p_inodo_dir, &ultima_entrada, p_entrada * sizeof(struct entrada), sizeof(struct entrada)) == FALLO) {
+			mi_signalSem();
             return FALLO;
         }
         // Truncar el inodo a su tamaño menos el tamaño de una entrada
