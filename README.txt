@@ -7,3 +7,4 @@ Miembros: - Loan Besnardeau Logeais
 
 	IA:
 	-Retocar el unlink perque aquest no acabava de donar els valors esperats
+	-Per fer quadrar els atime, mtime, ctime amb els formats corresponents

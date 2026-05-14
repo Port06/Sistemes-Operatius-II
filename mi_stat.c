@@ -20,13 +20,21 @@ int main(int argc, char **argv) {
         return FALLO;
     }
 
-    // Imprimir info básica
+    char formato[100];
+    struct tm *tm;
+
     printf("no inodo %d\n", p_inodo);
     printf("tipo: %c\n", stat.tipo);
     printf("permisos: %d\n", stat.permisos);
-    printf("atime: %ld\n", stat.atime);
-    printf("mtime: %ld\n", stat.mtime);
-    printf("ctime: %ld\n", stat.ctime);
+    tm = localtime(&stat.atime);
+    strftime(formato, sizeof(formato), "%a %Y-%m-%d %H:%M:%S", tm);
+    printf("atime: %s\n", formato);
+    tm = localtime(&stat.mtime);
+    strftime(formato, sizeof(formato), "%a %Y-%m-%d %H:%M:%S", tm);
+    printf("mtime: %s\n", formato);
+    tm = localtime(&stat.ctime);
+    strftime(formato, sizeof(formato), "%a %Y-%m-%d %H:%M:%S", tm);
+    printf("ctime: %s\n", formato);
     printf("nlinks: %d\n", stat.nlinks);
     printf("tamEnBytesLog: %d\n", stat.tamEnBytesLog);
     printf("numBloquesOcupados: %d\n", stat.numBloquesOcupados);
