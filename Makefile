@@ -13,17 +13,11 @@ all: $(OBJS) $(PROGRAMS)
 $(PROGRAMS): $(LIBRARIES) $(INCLUDES)
 	$(CC) $(LDFLAGS) $(LIBRARIES) $@.o -o $@
 
-<<<<<<< HEAD
-%.o: %.c $(INCLUDES)
-	$(CC) $(CFLAGS) -o $@ -c $<
-
-=======
 
 %.o: %.c $(INCLUDES)
 	$(CC) $(CFLAGS) -o $@ -c $<
 
 
->>>>>>> 7dfe881 (no errors compilacio (falten warnings))
 .PHONY: clean
 clean:
 	rm -rf *.o *~ $(PROGRAMS) disco* ext*
