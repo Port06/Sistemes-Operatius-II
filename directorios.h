@@ -30,3 +30,5 @@ int mi_write(const char *camino, const void *buf, unsigned int offset, unsigned 
 int mi_read(const char *camino, void *buf, unsigned int offset, unsigned int nbytes);
 int mi_link(const char *camino1, const char *camino2);
 int mi_unlink(const char *camino);
+void mi_waitSem();
+void mi_signalSem();

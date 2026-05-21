@@ -10,20 +10,16 @@ static unsigned int inside_sc = 0;
 
 // Metodos para los semaforos
 void mi_waitSem() {
-
     if (!inside_sc) {
-        waitSem(mutex);
+        waitSem(mutex);   // OK
     }
-
     inside_sc++;
 }
 
 void mi_signalSem() {
-
     inside_sc--;
-
     if (!inside_sc) {
-        signalSem(mutex);
+        signalSem(mutex); // OK
     }
 }
 
