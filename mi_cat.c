@@ -1,5 +1,3 @@
-
-
 #include "directorios.h"
 #include "bloques.h"
 #include <stdio.h>
