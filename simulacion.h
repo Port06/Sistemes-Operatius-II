@@ -2,6 +2,7 @@
 #define SIMULACION_H
 
 #include "directorios.h"
+#include "bloques.h"
 
 #define REGMAX 500000
 #define NUMPROCESOS 100
