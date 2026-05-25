@@ -1,59 +1,90 @@
 #include "directorios.h"
+#include "bloques.h"
+
+#include <stdio.h>
+#include <string.h>
 
 int main(int argc, char **argv) {
 
     if (argc != 4) {
-        fprintf(stderr, "Uso: ./mi_mv <disco> </origen> </destino/>\n");
+        fprintf(stderr,
+                "Uso: ./mi_mv <disco> </origen> </destino/>\n");
         return FALLO;
     }
 
-    // El destino debe ser directorio
+    // El destino debe acabar en '/'
     if (argv[3][strlen(argv[3]) - 1] != '/') {
-        fprintf(stderr, "Error: destino debe ser un directorio\n");
+        fprintf(stderr,
+                "Error: el destino debe ser un directorio\n");
         return FALLO;
     }
 
+    // Montar disco
     if (bmount(argv[1]) == FALLO) {
-        fprintf(stderr, "Error al montar disco\n");
+        fprintf(stderr,
+                "Error al montar el disco\n");
         return FALLO;
     }
 
-    // Extraer nombre del origen
-    char inicial[TAMNOMBRE];
-    char final[TAMNOMBRE * PROFUNDIDAD];
+    // Detectar si origen es fichero o directorio
     char tipo;
 
-    if (extraer_camino(argv[2], inicial, final, &tipo) == FALLO) {
-        bumount();
-        return FALLO;
+    int len = strlen(argv[2]);
+
+    if (argv[2][len - 1] == '/') {
+        tipo = 'd';
+    } else {
+        tipo = 'f';
     }
 
-    // Construir nueva ruta: destino + nombre
-    char nueva_ruta[TAMNOMBRE * PROFUNDIDAD];
-    strcpy(nueva_ruta, argv[3]);
-    strcat(nueva_ruta, inicial);
-
-    // Si es directorio, mantener '/'
+    // No permitimos mover directorios
     if (tipo == 'd') {
-        strcat(nueva_ruta, "/");
+        fprintf(stderr,
+                "Error: no se pueden mover directorios\n");
+        bumount();
+        return FALLO;
     }
 
-    // Primero se crea el enlace en destino
+    // Obtener nombre final del fichero
+    char *nombre = strrchr(argv[2], '/');
+
+    if (nombre == NULL || strlen(nombre) <= 1) {
+        fprintf(stderr,
+                "Error al obtener el nombre del fichero\n");
+        bumount();
+        return FALLO;
+    }
+
+    nombre++; // saltar '/'
+
+    // Construir nueva ruta
+    char nueva_ruta[1024];
+
+    strcpy(nueva_ruta, argv[3]);
+    strcat(nueva_ruta, nombre);
+
+    // Crear enlace en destino
     int error = mi_link(argv[2], nueva_ruta);
+
     if (error < 0) {
-        fprintf(stderr, "Error al crear enlace (destino ya existe o fallo)\n");
+        fprintf(stderr,
+                "Error al crear enlace en destino\n");
         bumount();
         return FALLO;
     }
 
-    // Luego se borra la entrada original
+    // Eliminar entrada original
     error = mi_unlink(argv[2]);
+
     if (error < 0) {
-        fprintf(stderr, "Error al eliminar origen\n");
+        fprintf(stderr,
+                "Error al eliminar origen\n");
         bumount();
         return FALLO;
     }
 
+    // Desmontar disco
     bumount();
+
     return EXITO;
 }
