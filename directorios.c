@@ -55,6 +55,10 @@ int buscar_entrada(const char *camino_parcial, unsigned int *p_inodo_dir, unsign
 
     int cant_entradas_inodo, num_entrada_inodo = 0;
 
+    if (bread(posSB, &SB) == FALLO) {
+        fprintf(stderr, RED "Error al leer la estructura en SB\n" RESET);
+        return FALLO;
+    }
 
     if (strcmp(camino_parcial, "/") == 0) { // Camino_parcial es “/”
        *p_inodo = SB.posInodoRaiz;  // Nuestra raiz siempre estará asociada al inodo 0
@@ -190,6 +194,7 @@ int mi_chmod(const char *camino, unsigned char permisos) {
 };
 
 int mi_stat(const char *camino, struct STAT *p_stat) {
+    printf("DEBUG: Buscant camí: %s\n", camino);
     unsigned int p_inodo_dir = 0;
     unsigned int p_inodo;
     unsigned int p_entrada;
@@ -277,12 +282,12 @@ int mi_read(const char *camino, void *buf, unsigned int offset, unsigned int nby
 
 int mi_link(const char *camino1, const char *camino2){
 	mi_waitSem();
-    int p_inodo_dir1 = 0;
-    int p_inodo1;
-    int p_entrada1;
-    int p_inodo_dir2 = 0;
-    int p_inodo2;   
-    int p_entrada2;
+    unsigned int p_inodo_dir1 = 0;
+    unsigned int p_inodo1;
+    unsigned int p_entrada1;
+    unsigned int p_inodo_dir2 = 0;
+    unsigned int p_inodo2;   
+    unsigned int p_entrada2;
 
     // Obtener el numero de inodo del camino1
     int error = buscar_entrada(camino1, &p_inodo_dir1, &p_inodo1, &p_entrada1, 0, 0);

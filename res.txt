@@ -1,0 +1,701 @@
+PID: 17352
+Numero de escrituras: 50
+Primera Escritura	 1	 16477	 Tue 26-05-2026 01:28:13
+Ultima Escritura	 50	 344929	 Tue 26-05-2026 01:28:16
+Menor Posicion	 38	 16112	 Tue 26-05-2026 01:28:15
+Mayor Posicion	 8	 496263	 Tue 26-05-2026 01:28:14
+
+PID: 17353
+Numero de escrituras: 50
+Primera Escritura	 1	 410828	 Tue 26-05-2026 01:28:13
+Ultima Escritura	 50	 286491	 Tue 26-05-2026 01:28:16
+Menor Posicion	 11	 10462	 Tue 26-05-2026 01:28:14
+Mayor Posicion	 27	 496510	 Tue 26-05-2026 01:28:15
+
+PID: 17354
+Numero de escrituras: 50
+Primera Escritura	 1	 324806	 Tue 26-05-2026 01:28:14
+Ultima Escritura	 50	 370269	 Tue 26-05-2026 01:28:16
+Menor Posicion	 31	 422	 Tue 26-05-2026 01:28:15
+Mayor Posicion	 32	 491152	 Tue 26-05-2026 01:28:15
+
+PID: 17355
+Numero de escrituras: 50
+Primera Escritura	 1	 293812	 Tue 26-05-2026 01:28:14
+Ultima Escritura	 50	 312703	 Tue 26-05-2026 01:28:16
+Menor Posicion	 37	 23083	 Tue 26-05-2026 01:28:16
+Mayor Posicion	 5	 487193	 Tue 26-05-2026 01:28:14
+
+PID: 17356
+Numero de escrituras: 50
+Primera Escritura	 1	 263815	 Tue 26-05-2026 01:28:14
+Ultima Escritura	 50	 474134	 Tue 26-05-2026 01:28:16
+Menor Posicion	 2	 780	 Tue 26-05-2026 01:28:14
+Mayor Posicion	 38	 488779	 Tue 26-05-2026 01:28:16
+
+PID: 17357
+Numero de escrituras: 50
+Primera Escritura	 1	 185679	 Tue 26-05-2026 01:28:14
+Ultima Escritura	 50	 127636	 Tue 26-05-2026 01:28:17
+Menor Posicion	 22	 1917	 Tue 26-05-2026 01:28:15
+Mayor Posicion	 7	 466193	 Tue 26-05-2026 01:28:14
+
+PID: 17358
+Numero de escrituras: 50
+Primera Escritura	 1	 58313	 Tue 26-05-2026 01:28:14
+Ultima Escritura	 50	 448797	 Tue 26-05-2026 01:28:17
+Menor Posicion	 48	 4936	 Tue 26-05-2026 01:28:17
+Mayor Posicion	 41	 498235	 Tue 26-05-2026 01:28:16
+
+PID: 17359
+Numero de escrituras: 50
+Primera Escritura	 1	 33897	 Tue 26-05-2026 01:28:14
+Ultima Escritura	 50	 199892	 Tue 26-05-2026 01:28:17
+Menor Posicion	 31	 23000	 Tue 26-05-2026 01:28:16
+Mayor Posicion	 44	 495709	 Tue 26-05-2026 01:28:17
+
+PID: 17360
+Numero de escrituras: 50
+Primera Escritura	 1	 311636	 Tue 26-05-2026 01:28:15
+Ultima Escritura	 50	 454980	 Tue 26-05-2026 01:28:17
+Menor Posicion	 48	 939	 Tue 26-05-2026 01:28:17
+Mayor Posicion	 40	 483892	 Tue 26-05-2026 01:28:17
+
+PID: 17361
+Numero de escrituras: 50
+Primera Escritura	 1	 276912	 Tue 26-05-2026 01:28:15
+Ultima Escritura	 50	 97657	 Tue 26-05-2026 01:28:17
+Menor Posicion	 22	 3722	 Tue 26-05-2026 01:28:16
+Mayor Posicion	 23	 493067	 Tue 26-05-2026 01:28:16
+
+PID: 17362
+Numero de escrituras: 50
+Primera Escritura	 1	 100492	 Tue 26-05-2026 01:28:15
+Ultima Escritura	 50	 144643	 Tue 26-05-2026 01:28:17
+Menor Posicion	 2	 2021	 Tue 26-05-2026 01:28:15
+Mayor Posicion	 20	 480972	 Tue 26-05-2026 01:28:16
+
+PID: 17363
+Numero de escrituras: 50
+Primera Escritura	 1	 18662	 Tue 26-05-2026 01:28:15
+Ultima Escritura	 50	 188766	 Tue 26-05-2026 01:28:17
+Menor Posicion	 24	 6748	 Tue 26-05-2026 01:28:16
+Mayor Posicion	 49	 491623	 Tue 26-05-2026 01:28:17
+
+PID: 17367
+Numero de escrituras: 50
+Primera Escritura	 1	 319801	 Tue 26-05-2026 01:28:15
+Ultima Escritura	 50	 306618	 Tue 26-05-2026 01:28:18
+Menor Posicion	 36	 8006	 Tue 26-05-2026 01:28:17
+Mayor Posicion	 24	 497286	 Tue 26-05-2026 01:28:16
+
+PID: 17371
+Numero de escrituras: 50
+Primera Escritura	 1	 145898	 Tue 26-05-2026 01:28:15
+Ultima Escritura	 50	 149933	 Tue 26-05-2026 01:28:18
+Menor Posicion	 34	 1295	 Tue 26-05-2026 01:28:17
+Mayor Posicion	 45	 490673	 Tue 26-05-2026 01:28:18
+
+PID: 17372
+Numero de escrituras: 50
+Primera Escritura	 1	 250120	 Tue 26-05-2026 01:28:15
+Ultima Escritura	 50	 453972	 Tue 26-05-2026 01:28:18
+Menor Posicion	 37	 8968	 Tue 26-05-2026 01:28:17
+Mayor Posicion	 3	 488490	 Tue 26-05-2026 01:28:16
+
+PID: 17375
+Numero de escrituras: 50
+Primera Escritura	 1	 367322	 Tue 26-05-2026 01:28:16
+Ultima Escritura	 50	 11655	 Tue 26-05-2026 01:28:18
+Menor Posicion	 46	 3771	 Tue 26-05-2026 01:28:18
+Mayor Posicion	 27	 491518	 Tue 26-05-2026 01:28:17
+
+PID: 17401
+Numero de escrituras: 50
+Primera Escritura	 1	 19964	 Tue 26-05-2026 01:28:16
+Ultima Escritura	 50	 375622	 Tue 26-05-2026 01:28:18
+Menor Posicion	 26	 2843	 Tue 26-05-2026 01:28:17
+Mayor Posicion	 9	 482871	 Tue 26-05-2026 01:28:16
+
+PID: 17402
+Numero de escrituras: 50
+Primera Escritura	 1	 219055	 Tue 26-05-2026 01:28:16
+Ultima Escritura	 50	 46712	 Tue 26-05-2026 01:28:18
+Menor Posicion	 47	 5400	 Tue 26-05-2026 01:28:18
+Mayor Posicion	 5	 493322	 Tue 26-05-2026 01:28:16
+
+PID: 17403
+Numero de escrituras: 50
+Primera Escritura	 1	 35952	 Tue 26-05-2026 01:28:16
+Ultima Escritura	 50	 459363	 Tue 26-05-2026 01:28:18
+Menor Posicion	 43	 10792	 Tue 26-05-2026 01:28:18
+Mayor Posicion	 9	 486280	 Tue 26-05-2026 01:28:16
+
+PID: 17404
+Numero de escrituras: 50
+Primera Escritura	 1	 415424	 Tue 26-05-2026 01:28:16
+Ultima Escritura	 50	 306665	 Tue 26-05-2026 01:28:19
+Menor Posicion	 39	 7659	 Tue 26-05-2026 01:28:18
+Mayor Posicion	 14	 495836	 Tue 26-05-2026 01:28:17
+
+PID: 17405
+Numero de escrituras: 50
+Primera Escritura	 1	 383111	 Tue 26-05-2026 01:28:16
+Ultima Escritura	 50	 2155	 Tue 26-05-2026 01:28:19
+Menor Posicion	 50	 2155	 Tue 26-05-2026 01:28:19
+Mayor Posicion	 33	 489487	 Tue 26-05-2026 01:28:18
+
+PID: 17406
+Numero de escrituras: 50
+Primera Escritura	 1	 180454	 Tue 26-05-2026 01:28:16
+Ultima Escritura	 50	 84918	 Tue 26-05-2026 01:28:19
+Menor Posicion	 26	 6785	 Tue 26-05-2026 01:28:17
+Mayor Posicion	 21	 496119	 Tue 26-05-2026 01:28:17
+
+PID: 17408
+Numero de escrituras: 50
+Primera Escritura	 1	 421566	 Tue 26-05-2026 01:28:16
+Ultima Escritura	 50	 363910	 Tue 26-05-2026 01:28:19
+Menor Posicion	 26	 19	 Tue 26-05-2026 01:28:18
+Mayor Posicion	 9	 494716	 Tue 26-05-2026 01:28:17
+
+PID: 17409
+Numero de escrituras: 50
+Primera Escritura	 1	 212278	 Tue 26-05-2026 01:28:16
+Ultima Escritura	 50	 59536	 Tue 26-05-2026 01:28:19
+Menor Posicion	 25	 633	 Tue 26-05-2026 01:28:18
+Mayor Posicion	 41	 497518	 Tue 26-05-2026 01:28:18
+
+PID: 17410
+Numero de escrituras: 50
+Primera Escritura	 1	 2573	 Tue 26-05-2026 01:28:17
+Ultima Escritura	 50	 260618	 Tue 26-05-2026 01:28:19
+Menor Posicion	 1	 2573	 Tue 26-05-2026 01:28:17
+Mayor Posicion	 40	 488248	 Tue 26-05-2026 01:28:19
+
+PID: 17416
+Numero de escrituras: 50
+Primera Escritura	 1	 184408	 Tue 26-05-2026 01:28:17
+Ultima Escritura	 50	 79027	 Tue 26-05-2026 01:28:19
+Menor Posicion	 5	 14007	 Tue 26-05-2026 01:28:17
+Mayor Posicion	 26	 499903	 Tue 26-05-2026 01:28:18
+
+PID: 17445
+Numero de escrituras: 50
+Primera Escritura	 1	 246158	 Tue 26-05-2026 01:28:17
+Ultima Escritura	 50	 198900	 Tue 26-05-2026 01:28:19
+Menor Posicion	 46	 3376	 Tue 26-05-2026 01:28:19
+Mayor Posicion	 37	 498175	 Tue 26-05-2026 01:28:19
+
+PID: 17446
+Numero de escrituras: 50
+Primera Escritura	 1	 67308	 Tue 26-05-2026 01:28:17
+Ultima Escritura	 50	 55979	 Tue 26-05-2026 01:28:19
+Menor Posicion	 46	 10432	 Tue 26-05-2026 01:28:19
+Mayor Posicion	 23	 474867	 Tue 26-05-2026 01:28:18
+
+PID: 17447
+Numero de escrituras: 50
+Primera Escritura	 1	 11336	 Tue 26-05-2026 01:28:17
+Ultima Escritura	 50	 297228	 Tue 26-05-2026 01:28:19
+Menor Posicion	 1	 11336	 Tue 26-05-2026 01:28:17
+Mayor Posicion	 34	 496389	 Tue 26-05-2026 01:28:19
+
+PID: 17448
+Numero de escrituras: 50
+Primera Escritura	 1	 154570	 Tue 26-05-2026 01:28:17
+Ultima Escritura	 50	 103350	 Tue 26-05-2026 01:28:20
+Menor Posicion	 12	 27559	 Tue 26-05-2026 01:28:18
+Mayor Posicion	 32	 497883	 Tue 26-05-2026 01:28:19
+
+PID: 17449
+Numero de escrituras: 50
+Primera Escritura	 1	 9977	 Tue 26-05-2026 01:28:17
+Ultima Escritura	 50	 333311	 Tue 26-05-2026 01:28:20
+Menor Posicion	 28	 14	 Tue 26-05-2026 01:28:19
+Mayor Posicion	 9	 499566	 Tue 26-05-2026 01:28:18
+
+PID: 17453
+Numero de escrituras: 50
+Primera Escritura	 1	 19524	 Tue 26-05-2026 01:28:17
+Ultima Escritura	 50	 371618	 Tue 26-05-2026 01:28:20
+Menor Posicion	 2	 936	 Tue 26-05-2026 01:28:17
+Mayor Posicion	 49	 484187	 Tue 26-05-2026 01:28:20
+
+PID: 17457
+Numero de escrituras: 50
+Primera Escritura	 1	 203479	 Tue 26-05-2026 01:28:17
+Ultima Escritura	 50	 310952	 Tue 26-05-2026 01:28:20
+Menor Posicion	 36	 10491	 Tue 26-05-2026 01:28:19
+Mayor Posicion	 34	 496748	 Tue 26-05-2026 01:28:19
+
+PID: 17458
+Numero de escrituras: 50
+Primera Escritura	 1	 455686	 Tue 26-05-2026 01:28:17
+Ultima Escritura	 50	 226460	 Tue 26-05-2026 01:28:20
+Menor Posicion	 46	 391	 Tue 26-05-2026 01:28:20
+Mayor Posicion	 5	 497380	 Tue 26-05-2026 01:28:18
+
+PID: 17459
+Numero de escrituras: 50
+Primera Escritura	 1	 216256	 Tue 26-05-2026 01:28:18
+Ultima Escritura	 50	 85227	 Tue 26-05-2026 01:28:20
+Menor Posicion	 30	 10525	 Tue 26-05-2026 01:28:19
+Mayor Posicion	 46	 490284	 Tue 26-05-2026 01:28:20
+
+PID: 17460
+Numero de escrituras: 50
+Primera Escritura	 1	 423727	 Tue 26-05-2026 01:28:18
+Ultima Escritura	 50	 329502	 Tue 26-05-2026 01:28:20
+Menor Posicion	 32	 2901	 Tue 26-05-2026 01:28:19
+Mayor Posicion	 48	 497530	 Tue 26-05-2026 01:28:20
+
+PID: 17461
+Numero de escrituras: 50
+Primera Escritura	 1	 15930	 Tue 26-05-2026 01:28:18
+Ultima Escritura	 50	 347447	 Tue 26-05-2026 01:28:20
+Menor Posicion	 1	 15930	 Tue 26-05-2026 01:28:18
+Mayor Posicion	 23	 499419	 Tue 26-05-2026 01:28:19
+
+PID: 17462
+Numero de escrituras: 50
+Primera Escritura	 1	 490946	 Tue 26-05-2026 01:28:18
+Ultima Escritura	 50	 93701	 Tue 26-05-2026 01:28:20
+Menor Posicion	 48	 8192	 Tue 26-05-2026 01:28:20
+Mayor Posicion	 32	 493233	 Tue 26-05-2026 01:28:19
+
+PID: 17463
+Numero de escrituras: 50
+Primera Escritura	 1	 170938	 Tue 26-05-2026 01:28:18
+Ultima Escritura	 50	 482378	 Tue 26-05-2026 01:28:20
+Menor Posicion	 28	 11805	 Tue 26-05-2026 01:28:19
+Mayor Posicion	 16	 499362	 Tue 26-05-2026 01:28:19
+
+PID: 17464
+Numero de escrituras: 50
+Primera Escritura	 1	 286477	 Tue 26-05-2026 01:28:18
+Ultima Escritura	 50	 217285	 Tue 26-05-2026 01:28:21
+Menor Posicion	 17	 86	 Tue 26-05-2026 01:28:19
+Mayor Posicion	 22	 496851	 Tue 26-05-2026 01:28:19
+
+PID: 17465
+Numero de escrituras: 50
+Primera Escritura	 1	 146193	 Tue 26-05-2026 01:28:18
+Ultima Escritura	 50	 336593	 Tue 26-05-2026 01:28:21
+Menor Posicion	 44	 14316	 Tue 26-05-2026 01:28:20
+Mayor Posicion	 43	 486344	 Tue 26-05-2026 01:28:20
+
+PID: 17466
+Numero de escrituras: 50
+Primera Escritura	 1	 393845	 Tue 26-05-2026 01:28:18
+Ultima Escritura	 50	 72279	 Tue 26-05-2026 01:28:21
+Menor Posicion	 46	 17681	 Tue 26-05-2026 01:28:20
+Mayor Posicion	 17	 490562	 Tue 26-05-2026 01:28:19
+
+PID: 17467
+Numero de escrituras: 50
+Primera Escritura	 1	 423679	 Tue 26-05-2026 01:28:18
+Ultima Escritura	 50	 45585	 Tue 26-05-2026 01:28:21
+Menor Posicion	 13	 8847	 Tue 26-05-2026 01:28:19
+Mayor Posicion	 45	 485619	 Tue 26-05-2026 01:28:21
+
+PID: 17468
+Numero de escrituras: 50
+Primera Escritura	 1	 81750	 Tue 26-05-2026 01:28:18
+Ultima Escritura	 50	 301324	 Tue 26-05-2026 01:28:21
+Menor Posicion	 36	 3911	 Tue 26-05-2026 01:28:20
+Mayor Posicion	 43	 479831	 Tue 26-05-2026 01:28:21
+
+PID: 17469
+Numero de escrituras: 50
+Primera Escritura	 1	 326390	 Tue 26-05-2026 01:28:18
+Ultima Escritura	 50	 378475	 Tue 26-05-2026 01:28:21
+Menor Posicion	 39	 5201	 Tue 26-05-2026 01:28:20
+Mayor Posicion	 6	 494999	 Tue 26-05-2026 01:28:19
+
+PID: 17470
+Numero de escrituras: 50
+Primera Escritura	 1	 233925	 Tue 26-05-2026 01:28:18
+Ultima Escritura	 50	 255176	 Tue 26-05-2026 01:28:21
+Menor Posicion	 49	 13360	 Tue 26-05-2026 01:28:21
+Mayor Posicion	 23	 499805	 Tue 26-05-2026 01:28:20
+
+PID: 17471
+Numero de escrituras: 49
+Primera Escritura	 1	 83737	 Tue 26-05-2026 01:28:19
+Ultima Escritura	 50	 327128	 Tue 26-05-2026 01:28:21
+Menor Posicion	 25	 1314	 Tue 26-05-2026 01:28:20
+Mayor Posicion	 12	 493172	 Tue 26-05-2026 01:28:19
+
+PID: 17472
+Numero de escrituras: 50
+Primera Escritura	 1	 432093	 Tue 26-05-2026 01:28:19
+Ultima Escritura	 50	 180286	 Tue 26-05-2026 01:28:21
+Menor Posicion	 28	 1316	 Tue 26-05-2026 01:28:20
+Mayor Posicion	 24	 499915	 Tue 26-05-2026 01:28:20
+
+PID: 17473
+Numero de escrituras: 50
+Primera Escritura	 1	 378010	 Tue 26-05-2026 01:28:19
+Ultima Escritura	 50	 268720	 Tue 26-05-2026 01:28:21
+Menor Posicion	 29	 3979	 Tue 26-05-2026 01:28:20
+Mayor Posicion	 21	 484152	 Tue 26-05-2026 01:28:20
+
+PID: 17474
+Numero de escrituras: 50
+Primera Escritura	 1	 217731	 Tue 26-05-2026 01:28:19
+Ultima Escritura	 50	 265553	 Tue 26-05-2026 01:28:21
+Menor Posicion	 15	 9177	 Tue 26-05-2026 01:28:20
+Mayor Posicion	 40	 471187	 Tue 26-05-2026 01:28:21
+
+PID: 17475
+Numero de escrituras: 50
+Primera Escritura	 1	 70615	 Tue 26-05-2026 01:28:19
+Ultima Escritura	 50	 27460	 Tue 26-05-2026 01:28:21
+Menor Posicion	 16	 15032	 Tue 26-05-2026 01:28:20
+Mayor Posicion	 32	 488389	 Tue 26-05-2026 01:28:21
+
+PID: 17476
+Numero de escrituras: 49
+Primera Escritura	 1	 268048	 Tue 26-05-2026 01:28:19
+Ultima Escritura	 50	 206844	 Tue 26-05-2026 01:28:22
+Menor Posicion	 24	 3793	 Tue 26-05-2026 01:28:20
+Mayor Posicion	 26	 494298	 Tue 26-05-2026 01:28:20
+
+PID: 17477
+Numero de escrituras: 50
+Primera Escritura	 1	 418798	 Tue 26-05-2026 01:28:19
+Ultima Escritura	 50	 433482	 Tue 26-05-2026 01:28:22
+Menor Posicion	 49	 19661	 Tue 26-05-2026 01:28:22
+Mayor Posicion	 35	 497761	 Tue 26-05-2026 01:28:21
+
+PID: 17478
+Numero de escrituras: 50
+Primera Escritura	 1	 52071	 Tue 26-05-2026 01:28:19
+Ultima Escritura	 50	 326400	 Tue 26-05-2026 01:28:22
+Menor Posicion	 16	 142	 Tue 26-05-2026 01:28:20
+Mayor Posicion	 7	 479092	 Tue 26-05-2026 01:28:20
+
+PID: 17479
+Numero de escrituras: 50
+Primera Escritura	 1	 240349	 Tue 26-05-2026 01:28:19
+Ultima Escritura	 50	 305574	 Tue 26-05-2026 01:28:22
+Menor Posicion	 43	 28489	 Tue 26-05-2026 01:28:21
+Mayor Posicion	 4	 495507	 Tue 26-05-2026 01:28:19
+
+PID: 17486
+Numero de escrituras: 50
+Primera Escritura	 1	 57761	 Tue 26-05-2026 01:28:19
+Ultima Escritura	 50	 360993	 Tue 26-05-2026 01:28:22
+Menor Posicion	 48	 258	 Tue 26-05-2026 01:28:22
+Mayor Posicion	 25	 499062	 Tue 26-05-2026 01:28:21
+
+PID: 17487
+Numero de escrituras: 50
+Primera Escritura	 1	 293897	 Tue 26-05-2026 01:28:19
+Ultima Escritura	 50	 278194	 Tue 26-05-2026 01:28:22
+Menor Posicion	 20	 1361	 Tue 26-05-2026 01:28:20
+Mayor Posicion	 31	 495405	 Tue 26-05-2026 01:28:21
+
+PID: 17488
+Numero de escrituras: 50
+Primera Escritura	 1	 263295	 Tue 26-05-2026 01:28:20
+Ultima Escritura	 50	 362477	 Tue 26-05-2026 01:28:22
+Menor Posicion	 33	 1934	 Tue 26-05-2026 01:28:21
+Mayor Posicion	 41	 497695	 Tue 26-05-2026 01:28:22
+
+PID: 17489
+Numero de escrituras: 50
+Primera Escritura	 1	 25246	 Tue 26-05-2026 01:28:20
+Ultima Escritura	 50	 115352	 Tue 26-05-2026 01:28:22
+Menor Posicion	 48	 14843	 Tue 26-05-2026 01:28:22
+Mayor Posicion	 41	 482386	 Tue 26-05-2026 01:28:22
+
+PID: 17490
+Numero de escrituras: 50
+Primera Escritura	 1	 215630	 Tue 26-05-2026 01:28:20
+Ultima Escritura	 50	 272668	 Tue 26-05-2026 01:28:22
+Menor Posicion	 39	 8454	 Tue 26-05-2026 01:28:22
+Mayor Posicion	 42	 499564	 Tue 26-05-2026 01:28:22
+
+PID: 17491
+Numero de escrituras: 50
+Primera Escritura	 1	 158331	 Tue 26-05-2026 01:28:20
+Ultima Escritura	 50	 259361	 Tue 26-05-2026 01:28:22
+Menor Posicion	 5	 6707	 Tue 26-05-2026 01:28:20
+Mayor Posicion	 34	 497684	 Tue 26-05-2026 01:28:21
+
+PID: 17492
+Numero de escrituras: 50
+Primera Escritura	 1	 119909	 Tue 26-05-2026 01:28:20
+Ultima Escritura	 50	 300785	 Tue 26-05-2026 01:28:22
+Menor Posicion	 28	 4086	 Tue 26-05-2026 01:28:21
+Mayor Posicion	 42	 440572	 Tue 26-05-2026 01:28:22
+
+PID: 17493
+Numero de escrituras: 50
+Primera Escritura	 1	 159476	 Tue 26-05-2026 01:28:20
+Ultima Escritura	 50	 212518	 Tue 26-05-2026 01:28:22
+Menor Posicion	 3	 6096	 Tue 26-05-2026 01:28:20
+Mayor Posicion	 26	 494394	 Tue 26-05-2026 01:28:21
+
+PID: 17494
+Numero de escrituras: 50
+Primera Escritura	 1	 379734	 Tue 26-05-2026 01:28:20
+Ultima Escritura	 50	 368447	 Tue 26-05-2026 01:28:23
+Menor Posicion	 22	 7625	 Tue 26-05-2026 01:28:21
+Mayor Posicion	 6	 489479	 Tue 26-05-2026 01:28:20
+
+PID: 17495
+Numero de escrituras: 50
+Primera Escritura	 1	 110791	 Tue 26-05-2026 01:28:20
+Ultima Escritura	 50	 171365	 Tue 26-05-2026 01:28:23
+Menor Posicion	 36	 11394	 Tue 26-05-2026 01:28:22
+Mayor Posicion	 16	 476650	 Tue 26-05-2026 01:28:21
+
+PID: 17496
+Numero de escrituras: 50
+Primera Escritura	 1	 191662	 Tue 26-05-2026 01:28:20
+Ultima Escritura	 50	 304190	 Tue 26-05-2026 01:28:23
+Menor Posicion	 49	 4169	 Tue 26-05-2026 01:28:23
+Mayor Posicion	 5	 498526	 Tue 26-05-2026 01:28:21
+
+PID: 17497
+Numero de escrituras: 50
+Primera Escritura	 1	 75381	 Tue 26-05-2026 01:28:20
+Ultima Escritura	 50	 448711	 Tue 26-05-2026 01:28:23
+Menor Posicion	 43	 17694	 Tue 26-05-2026 01:28:22
+Mayor Posicion	 21	 498876	 Tue 26-05-2026 01:28:21
+
+PID: 17498
+Numero de escrituras: 50
+Primera Escritura	 1	 467918	 Tue 26-05-2026 01:28:20
+Ultima Escritura	 50	 472663	 Tue 26-05-2026 01:28:23
+Menor Posicion	 42	 1795	 Tue 26-05-2026 01:28:23
+Mayor Posicion	 50	 472663	 Tue 26-05-2026 01:28:23
+
+PID: 17499
+Numero de escrituras: 50
+Primera Escritura	 1	 356139	 Tue 26-05-2026 01:28:20
+Ultima Escritura	 50	 335440	 Tue 26-05-2026 01:28:23
+Menor Posicion	 21	 5651	 Tue 26-05-2026 01:28:21
+Mayor Posicion	 10	 498456	 Tue 26-05-2026 01:28:21
+
+PID: 17500
+Numero de escrituras: 50
+Primera Escritura	 1	 112777	 Tue 26-05-2026 01:28:20
+Ultima Escritura	 50	 400383	 Tue 26-05-2026 01:28:23
+Menor Posicion	 24	 33384	 Tue 26-05-2026 01:28:22
+Mayor Posicion	 21	 494938	 Tue 26-05-2026 01:28:21
+
+PID: 17503
+Numero de escrituras: 50
+Primera Escritura	 1	 430618	 Tue 26-05-2026 01:28:21
+Ultima Escritura	 50	 242718	 Tue 26-05-2026 01:28:23
+Menor Posicion	 40	 4321	 Tue 26-05-2026 01:28:23
+Mayor Posicion	 7	 493891	 Tue 26-05-2026 01:28:21
+
+PID: 17544
+Numero de escrituras: 50
+Primera Escritura	 1	 492116	 Tue 26-05-2026 01:28:21
+Ultima Escritura	 50	 300672	 Tue 26-05-2026 01:28:23
+Menor Posicion	 6	 18483	 Tue 26-05-2026 01:28:21
+Mayor Posicion	 1	 492116	 Tue 26-05-2026 01:28:21
+
+PID: 17545
+Numero de escrituras: 50
+Primera Escritura	 1	 404041	 Tue 26-05-2026 01:28:21
+Ultima Escritura	 50	 225088	 Tue 26-05-2026 01:28:23
+Menor Posicion	 38	 4342	 Tue 26-05-2026 01:28:23
+Mayor Posicion	 25	 470177	 Tue 26-05-2026 01:28:22
+
+PID: 17546
+Numero de escrituras: 50
+Primera Escritura	 1	 384671	 Tue 26-05-2026 01:28:21
+Ultima Escritura	 50	 354936	 Tue 26-05-2026 01:28:23
+Menor Posicion	 2	 815	 Tue 26-05-2026 01:28:21
+Mayor Posicion	 33	 495215	 Tue 26-05-2026 01:28:22
+
+PID: 17547
+Numero de escrituras: 50
+Primera Escritura	 1	 102130	 Tue 26-05-2026 01:28:21
+Ultima Escritura	 50	 338822	 Tue 26-05-2026 01:28:23
+Menor Posicion	 42	 13499	 Tue 26-05-2026 01:28:23
+Mayor Posicion	 47	 491394	 Tue 26-05-2026 01:28:23
+
+PID: 17548
+Numero de escrituras: 50
+Primera Escritura	 1	 24398	 Tue 26-05-2026 01:28:21
+Ultima Escritura	 50	 179631	 Tue 26-05-2026 01:28:23
+Menor Posicion	 22	 4451	 Tue 26-05-2026 01:28:22
+Mayor Posicion	 44	 489211	 Tue 26-05-2026 01:28:23
+
+PID: 17549
+Numero de escrituras: 50
+Primera Escritura	 1	 395289	 Tue 26-05-2026 01:28:21
+Ultima Escritura	 50	 166886	 Tue 26-05-2026 01:28:24
+Menor Posicion	 37	 15345	 Tue 26-05-2026 01:28:23
+Mayor Posicion	 48	 499054	 Tue 26-05-2026 01:28:23
+
+PID: 17550
+Numero de escrituras: 50
+Primera Escritura	 1	 208519	 Tue 26-05-2026 01:28:21
+Ultima Escritura	 50	 426671	 Tue 26-05-2026 01:28:24
+Menor Posicion	 30	 25059	 Tue 26-05-2026 01:28:23
+Mayor Posicion	 10	 498449	 Tue 26-05-2026 01:28:22
+
+PID: 17551
+Numero de escrituras: 50
+Primera Escritura	 1	 440639	 Tue 26-05-2026 01:28:21
+Ultima Escritura	 50	 325977	 Tue 26-05-2026 01:28:24
+Menor Posicion	 19	 16791	 Tue 26-05-2026 01:28:22
+Mayor Posicion	 10	 499450	 Tue 26-05-2026 01:28:22
+
+PID: 17552
+Numero de escrituras: 50
+Primera Escritura	 1	 29489	 Tue 26-05-2026 01:28:21
+Ultima Escritura	 50	 466152	 Tue 26-05-2026 01:28:24
+Menor Posicion	 1	 29489	 Tue 26-05-2026 01:28:21
+Mayor Posicion	 10	 489101	 Tue 26-05-2026 01:28:22
+
+PID: 17555
+Numero de escrituras: 50
+Primera Escritura	 1	 247524	 Tue 26-05-2026 01:28:21
+Ultima Escritura	 50	 395026	 Tue 26-05-2026 01:28:24
+Menor Posicion	 37	 6470	 Tue 26-05-2026 01:28:23
+Mayor Posicion	 33	 496499	 Tue 26-05-2026 01:28:23
+
+PID: 17557
+Numero de escrituras: 50
+Primera Escritura	 1	 375737	 Tue 26-05-2026 01:28:21
+Ultima Escritura	 50	 482275	 Tue 26-05-2026 01:28:24
+Menor Posicion	 32	 2484	 Tue 26-05-2026 01:28:23
+Mayor Posicion	 50	 482275	 Tue 26-05-2026 01:28:24
+
+PID: 17561
+Numero de escrituras: 50
+Primera Escritura	 1	 304899	 Tue 26-05-2026 01:28:22
+Ultima Escritura	 50	 24999	 Tue 26-05-2026 01:28:24
+Menor Posicion	 36	 6550	 Tue 26-05-2026 01:28:23
+Mayor Posicion	 17	 466628	 Tue 26-05-2026 01:28:22
+
+PID: 17562
+Numero de escrituras: 50
+Primera Escritura	 1	 101487	 Tue 26-05-2026 01:28:22
+Ultima Escritura	 50	 376459	 Tue 26-05-2026 01:28:24
+Menor Posicion	 17	 4247	 Tue 26-05-2026 01:28:22
+Mayor Posicion	 46	 494928	 Tue 26-05-2026 01:28:24
+
+PID: 17563
+Numero de escrituras: 50
+Primera Escritura	 1	 73214	 Tue 26-05-2026 01:28:22
+Ultima Escritura	 50	 350686	 Tue 26-05-2026 01:28:24
+Menor Posicion	 15	 1737	 Tue 26-05-2026 01:28:22
+Mayor Posicion	 24	 492547	 Tue 26-05-2026 01:28:23
+
+PID: 17612
+Numero de escrituras: 50
+Primera Escritura	 1	 58597	 Tue 26-05-2026 01:28:22
+Ultima Escritura	 50	 150455	 Tue 26-05-2026 01:28:24
+Menor Posicion	 23	 5981	 Tue 26-05-2026 01:28:23
+Mayor Posicion	 7	 497186	 Tue 26-05-2026 01:28:22
+
+PID: 17614
+Numero de escrituras: 50
+Primera Escritura	 1	 102160	 Tue 26-05-2026 01:28:22
+Ultima Escritura	 50	 200811	 Tue 26-05-2026 01:28:24
+Menor Posicion	 42	 11463	 Tue 26-05-2026 01:28:24
+Mayor Posicion	 29	 471094	 Tue 26-05-2026 01:28:23
+
+PID: 17672
+Numero de escrituras: 50
+Primera Escritura	 1	 381278	 Tue 26-05-2026 01:28:22
+Ultima Escritura	 50	 288892	 Tue 26-05-2026 01:28:24
+Menor Posicion	 34	 7002	 Tue 26-05-2026 01:28:24
+Mayor Posicion	 23	 491592	 Tue 26-05-2026 01:28:23
+
+PID: 17673
+Numero de escrituras: 50
+Primera Escritura	 1	 463786	 Tue 26-05-2026 01:28:22
+Ultima Escritura	 50	 387216	 Tue 26-05-2026 01:28:24
+Menor Posicion	 30	 12300	 Tue 26-05-2026 01:28:23
+Mayor Posicion	 4	 496970	 Tue 26-05-2026 01:28:22
+
+PID: 17674
+Numero de escrituras: 50
+Primera Escritura	 1	 207625	 Tue 26-05-2026 01:28:22
+Ultima Escritura	 50	 451635	 Tue 26-05-2026 01:28:24
+Menor Posicion	 48	 1858	 Tue 26-05-2026 01:28:24
+Mayor Posicion	 22	 497450	 Tue 26-05-2026 01:28:23
+
+PID: 17675
+Numero de escrituras: 50
+Primera Escritura	 1	 35013	 Tue 26-05-2026 01:28:22
+Ultima Escritura	 50	 71559	 Tue 26-05-2026 01:28:24
+Menor Posicion	 2	 10950	 Tue 26-05-2026 01:28:22
+Mayor Posicion	 25	 492580	 Tue 26-05-2026 01:28:23
+
+PID: 17676
+Numero de escrituras: 50
+Primera Escritura	 1	 97446	 Tue 26-05-2026 01:28:22
+Ultima Escritura	 50	 184657	 Tue 26-05-2026 01:28:25
+Menor Posicion	 26	 8333	 Tue 26-05-2026 01:28:23
+Mayor Posicion	 48	 499512	 Tue 26-05-2026 01:28:24
+
+PID: 17677
+Numero de escrituras: 50
+Primera Escritura	 1	 375495	 Tue 26-05-2026 01:28:22
+Ultima Escritura	 50	 5189	 Tue 26-05-2026 01:28:25
+Menor Posicion	 50	 5189	 Tue 26-05-2026 01:28:25
+Mayor Posicion	 19	 499758	 Tue 26-05-2026 01:28:23
+
+PID: 17678
+Numero de escrituras: 50
+Primera Escritura	 1	 493579	 Tue 26-05-2026 01:28:22
+Ultima Escritura	 50	 256737	 Tue 26-05-2026 01:28:25
+Menor Posicion	 45	 1085	 Tue 26-05-2026 01:28:24
+Mayor Posicion	 40	 499648	 Tue 26-05-2026 01:28:24
+
+PID: 17679
+Numero de escrituras: 50
+Primera Escritura	 1	 249613	 Tue 26-05-2026 01:28:22
+Ultima Escritura	 50	 51973	 Tue 26-05-2026 01:28:25
+Menor Posicion	 24	 6162	 Tue 26-05-2026 01:28:23
+Mayor Posicion	 45	 469944	 Tue 26-05-2026 01:28:25
+
+PID: 17680
+Numero de escrituras: 50
+Primera Escritura	 1	 140967	 Tue 26-05-2026 01:28:22
+Ultima Escritura	 50	 196750	 Tue 26-05-2026 01:28:25
+Menor Posicion	 16	 10885	 Tue 26-05-2026 01:28:23
+Mayor Posicion	 36	 494403	 Tue 26-05-2026 01:28:24
+
+PID: 17681
+Numero de escrituras: 50
+Primera Escritura	 1	 455077	 Tue 26-05-2026 01:28:22
+Ultima Escritura	 50	 301273	 Tue 26-05-2026 01:28:25
+Menor Posicion	 45	 3452	 Tue 26-05-2026 01:28:25
+Mayor Posicion	 49	 496859	 Tue 26-05-2026 01:28:25
+
+PID: 17682
+Numero de escrituras: 50
+Primera Escritura	 1	 70606	 Tue 26-05-2026 01:28:23
+Ultima Escritura	 50	 42879	 Tue 26-05-2026 01:28:25
+Menor Posicion	 5	 31965	 Tue 26-05-2026 01:28:23
+Mayor Posicion	 8	 498867	 Tue 26-05-2026 01:28:23
+
+PID: 17683
+Numero de escrituras: 50
+Primera Escritura	 1	 49335	 Tue 26-05-2026 01:28:23
+Ultima Escritura	 50	 417138	 Tue 26-05-2026 01:28:25
+Menor Posicion	 37	 2089	 Tue 26-05-2026 01:28:24
+Mayor Posicion	 40	 491028	 Tue 26-05-2026 01:28:25
+
+PID: 17684
+Numero de escrituras: 50
+Primera Escritura	 1	 233520	 Tue 26-05-2026 01:28:23
+Ultima Escritura	 50	 392435	 Tue 26-05-2026 01:28:25
+Menor Posicion	 23	 5527	 Tue 26-05-2026 01:28:24
+Mayor Posicion	 22	 483976	 Tue 26-05-2026 01:28:24
+
+DEBUG: Buscant camí: /simul_20260526012813/informe.txt
