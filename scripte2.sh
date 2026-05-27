@@ -1,5 +1,5 @@
 # Adelaida
-# scripte2.sh
+# scripte2.sh (fusionado con parte voluntaria)
 
 clear
 make clean
@@ -353,3 +353,130 @@ echo -e "\x1B[38;2;17;245;120m$ ./mi_ls -l disco /dir3/\x1b[0m"
 
 echo "################################################################################"
 #make clean
+
+# =============================================================================
+# PARTE VOLUNTARIA: RENOMBRADO (mi_rn) Y MOVIMIENTO (mi_mv)
+# =============================================================================
+echo -e "\x1B[38;2;17;245;120m######################################################################\x1b[0m"
+echo -e "\x1B[38;2;17;245;120mPARTE VOLUNTARIA: RENOMBRADO Y MOVIMIENTO\x1b[0m"
+echo -e "\x1B[38;2;17;245;120m######################################################################\x1b[0m"
+
+# Crear estructura adicional necesaria para las pruebas de renombrado y movimiento
+echo -e "\x1B[38;2;17;245;120mCreando estructura adicional para pruebas...\x1b[0m"
+./mi_mkdir disco 6 /dir1/dir12/
+./mi_touch disco 6 /dir1/dir12/fic122
+./mi_escribir disco /dir1/dir12/fic122 "Contenido original de fic122" 0
+
+./mi_mkdir disco 6 /dir2/dir22/
+./mi_touch disco 6 /dir2/dir22/fic221
+./mi_escribir disco /dir2/dir22/fic221 "Contenido original de fic221" 0
+
+./mi_mkdir disco 6 /dir2/dir23/
+
+echo -e "\x1B[38;2;17;245;120m######################################################################\x1b[0m"
+echo -e "\x1B[38;2;17;245;120mPRUEBAS DE RENOMBRADO (mi_rn)\x1b[0m"
+echo -e "\x1B[38;2;17;245;120m######################################################################\x1b[0m"
+
+echo -e "\x1B[38;2;17;245;120m$ ./mi_rn disco /dir1/dir12/fic122 fic121 #error (no existe)\x1b[0m"
+./mi_rn disco /dir1/dir12/fic122 fic121
+echo -e "\x1B[38;2;17;245;120m$ ./mi_cat disco /dir2/dir22/fic221\x1b[0m"
+./mi_cat disco /dir2/dir22/fic221
+echo -e "\x1B[38;2;17;245;120m$ ./mi_rn disco /dir2/dir22/fic221 fic222\x1b[0m"
+./mi_rn disco /dir2/dir22/fic221 fic222
+echo -e "\x1B[38;2;17;245;120m$ ./mi_cat disco /dir2/dir22/fic221\x1b[0m"
+./mi_cat disco /dir2/dir22/fic221
+echo -e "\x1B[38;2;17;245;120m$ ./mi_cat disco /dir2/dir22/fic222\x1b[0m"
+./mi_cat disco /dir2/dir22/fic222
+echo -e "\x1B[38;2;17;245;120m$ ./mi_ls -l disco /dir2/dir22/\x1b[0m"
+./mi_ls -l disco /dir2/dir22/
+echo -e "\x1B[38;2;17;245;120m$ ./mi_cat disco /dir1/dir12/fic122\x1b[0m"
+./mi_cat disco /dir1/dir12/fic122
+echo -e "\x1B[38;2;17;245;120m$ ./mi_rn disco /dir1/dir12/fic122 fic123\x1b[0m"
+./mi_rn disco /dir1/dir12/fic122 fic123
+echo -e "\x1B[38;2;17;245;120m$ ./mi_cat disco /dir1/dir12/fic122\x1b[0m"
+./mi_cat disco /dir1/dir12/fic122
+echo -e "\x1B[38;2;17;245;120m$ ./mi_cat disco /dir1/dir12/fic123\x1b[0m"
+./mi_cat disco /dir1/dir12/fic123
+echo -e "\x1B[38;2;17;245;120m$ ./mi_ls -l disco /dir1/dir12/\x1b[0m"
+./mi_ls -l disco /dir1/dir12/
+echo -e "\x1B[38;2;17;245;120m$ ./mi_rn disco /dir2/dir23/ dir24\x1b[0m"
+./mi_rn disco /dir2/dir23/ dir24
+echo -e "\x1B[38;2;17;245;120m$ ./mi_ls -l disco /dir2/\x1b[0m"
+./mi_ls -l disco /dir2/
+
+echo -e "\x1B[38;2;17;245;120m$ ./leer_sf disco\x1b[0m"
+./leer_sf disco
+echo
+echo -e "\x1B[38;2;17;245;120m###lo dejamos todo como antes!\x1b[0m"
+echo -e "\x1B[38;2;17;245;120m$ ./mi_rn disco /dir1/dir12/fic123 fic122\x1b[0m"
+./mi_rn disco /dir1/dir12/fic123 fic122
+echo -e "\x1B[38;2;17;245;120m$ ./mi_rn disco /dir2/dir22/fic222 fic221\x1b[0m"
+./mi_rn disco /dir2/dir22/fic222 fic221
+echo -e "\x1B[38;2;17;245;120m$ ./mi_rn disco /dir2/dir24/ dir23\x1b[0m"
+./mi_rn disco /dir2/dir24/ dir23
+echo -e "\x1B[38;2;17;245;120m$ ./mi_ls -l disco /dir1/dir12/\x1b[0m"
+./mi_ls -l disco /dir1/dir12/
+echo -e "\x1B[38;2;17;245;120m$ ./mi_ls -l disco /dir2/dir22/\x1b[0m"
+./mi_ls -l disco /dir2/dir22/
+echo -e "\x1B[38;2;17;245;120m$ ./mi_ls -l disco /dir2/\x1b[0m"
+./mi_ls -l disco /dir2/
+
+echo -e "\x1B[38;2;17;245;120m$ ./leer_sf disco\x1b[0m"
+./leer_sf disco
+
+echo -e "\x1B[38;2;17;245;120m######################################################################\x1b[0m"
+echo -e "\x1B[38;2;17;245;120mPRUEBAS DE MOVIMIENTO (mi_mv)\x1b[0m"
+echo -e "\x1B[38;2;17;245;120m######################################################################\x1b[0m"
+
+echo -e "\x1B[38;2;17;245;120m$./leer_sf disco\x1b[0m"
+./leer_sf disco
+echo -e "\x1B[38;2;17;245;120m$./mi_ls -l disco /dir2/dir22/\x1b[0m"
+./mi_ls -l disco /dir2/dir22/
+echo -e "\x1B[38;2;17;245;120m$./mi_mv disco /dir2/dir22/fic221 /dir1/fic11 #error destino\x1b[0m"
+./mi_mv disco /dir2/dir22/fic221 /dir1/fic11
+echo -e "\x1B[38;2;17;245;120m$./mi_ls -l disco /dir2/dir21/\x1b[0m"
+./mi_ls -l disco /dir2/dir21/
+echo -e "\x1B[38;2;17;245;120m$./mi_mv disco /dir2/dir22/fic221 /dir2/dir21/ #movemos un fichero\x1b[0m"
+./mi_mv disco /dir2/dir22/fic221 /dir2/dir21/
+echo -e "\x1B[38;2;17;245;120m$./mi_ls -l disco /dir2/dir22/\x1b[0m"
+./mi_ls -l disco /dir2/dir22/
+echo -e "\x1B[38;2;17;245;120m$./mi_ls -l disco /dir2/dir21/\x1b[0m"
+./mi_ls -l disco /dir2/dir21/
+echo -e "\x1B[38;2;17;245;120m$./leer_sf disco #Un bloque más libre\x1b[0m"
+./leer_sf disco
+echo -e "\x1B[38;2;17;245;120m$./mi_ls -l disco /\x1b[0m"
+./mi_ls -l disco /
+echo -e "\x1B[38;2;17;245;120m$./mi_ls -l disco /dir1/\x1b[0m"
+./mi_ls -l disco /dir1/
+echo -e "\x1B[38;2;17;245;120m$./mi_mv disco /dir3/ /dir1/ #movemos un directorio\x1b[0m"
+./mi_mv disco /dir3/ /dir1/
+echo -e "\x1B[38;2;17;245;120m$./mi_ls -l disco /\x1b[0m"
+./mi_ls -l disco /
+echo -e "\x1B[38;2;17;245;120m$./mi_ls -l disco /dir1/\x1b[0m"
+./mi_ls -l disco /dir1/
+echo -e "\x1B[38;2;17;245;120m$./leer_sf disco\x1b[0m"
+./leer_sf disco
+echo -e "\x1B[38;2;17;245;120m$./mi_mv disco /dir1/ /dir3/ #error\x1b[0m"
+./mi_mv disco /dir1/ /dir3/
+
+echo -e "\x1B[38;2;17;245;120m###lo dejamos todo como antes!\x1b[0m"
+echo -e "\x1B[38;2;17;245;120m$./mi_mv disco /dir2/dir21/fic221 /dir2/dir22/\x1b[0m"
+./mi_mv disco /dir2/dir21/fic221 /dir2/dir22/
+echo -e "\x1B[38;2;17;245;120m$./mi_ls -l disco /dir2/dir22/\x1b[0m"
+./mi_ls -l disco /dir2/dir22/
+echo -e "\x1B[38;2;17;245;120m$./mi_ls -l disco /dir2/dir21/\x1b[0m"
+./mi_ls -l disco /dir2/dir21/
+echo -e "\x1B[38;2;17;245;120m$./leer_sf disco #Un bloque menos libre\x1b[0m"
+./leer_sf disco
+echo -e "\x1B[38;2;17;245;120m$./mi_mv disco /dir1/dir3/ /\x1b[0m"
+./mi_mv disco /dir1/dir3/ /
+echo -e "\x1B[38;2;17;245;120m$./mi_ls -l disco /\x1b[0m"
+./mi_ls -l disco /
+echo -e "\x1B[38;2;17;245;120m$./mi_ls -l disco /dir1/\x1b[0m"
+./mi_ls -l disco /dir1/
+echo -e "\x1B[38;2;17;245;120m$./leer_sf disco\x1b[0m"
+./leer_sf disco
+
+echo -e "\x1B[38;2;17;245;120m######################################################################\x1b[0m"
+echo -e "\x1B[38;2;17;245;120mFIN DE LA PARTE VOLUNTARIA\x1b[0m"
+echo -e "\x1B[38;2;17;245;120m######################################################################\x1b[0m"
