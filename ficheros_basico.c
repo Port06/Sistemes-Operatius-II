@@ -572,8 +572,7 @@ int traducir_bloque_inodo(unsigned int ninodo, unsigned int nblogico, unsigned c
             if (ptr == 0) { //No cuelgan bloques de punteros
 				if (reservar == 0) return FALLO; //Error bloque a no imprimir por pantalla
 				//Reservar bloques de punteros y crear enlaces desde el inodo hasta el bloque de datos
-				ptr = reservar_bloque(); //Reservacion de bloque de punteros
-				fprintf(stderr, "reservado bloque de punteros (nivel %d): %u\n", nivel_punteros, ptr);				
+				ptr = reservar_bloque(); //Reservacion de bloque de punteros				
 				inodo.numBloquesOcupados++;
 				inodo.ctime = time(NULL); //Fecha actual
 				salvar_inodo = 1;
@@ -600,7 +599,6 @@ int traducir_bloque_inodo(unsigned int ninodo, unsigned int nblogico, unsigned c
 		if (ptr == 0) {
 			if (reservar == 0) return FALLO;  //Bloque inexistente a no imprimir por pantalla
 			ptr = reservar_bloque(); //Reservacion de bloque de datos      
-			fprintf(stderr, "reservado bloque datos: %u\n", ptr);
 			inodo.numBloquesOcupados++;
 			inodo.ctime = time(NULL); //Fecha actual
 			salvar_inodo = 1;

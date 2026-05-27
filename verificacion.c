@@ -48,7 +48,7 @@ static void formatear_fecha(time_t fecha, char *buffer, size_t tam) {
 }
 
 static int append_fmt(const char *camino, unsigned int *offset, const char *fmt, ...) {
-    char buffer[1024];  // Aumentado para manejar líneas más largas
+    char buffer[1024];
     va_list ap;
 
     va_start(ap, fmt);
@@ -132,21 +132,26 @@ static int escribir_informe_proceso(const char *camino_informe, unsigned int *of
     return EXITO;
 }
 
+// Función para suprimir la salida de debug de la biblioteca
+static void suprimir_debug_biblioteca(void) {
+    freopen("/dev/null", "w", stderr);
+}
+
 // Programa principal
 int main(int argc, char **argv) {
     // Verificar argumentos
     if (argc != 3 && argc != 4) {
         fprintf(stderr, "Uso: %s <nombre_dispositivo> <directorio_simulacion> [-q]\n", argv[0]);
-        fprintf(stderr, "  -q : modo silencioso (suprime mensajes no esenciales)\n");
+        fprintf(stderr, "  -q : modo silencioso (solo muestra procesos completados)\n");
         return FALLO;
     }
     
     // Opción silenciosa
+    int modo_silencioso = 0;
     if (argc == 4 && strcmp(argv[3], "-q") == 0) {
+        modo_silencioso = 1;
         set_verbose(0);
-        // Redirigir stderr a null temporalmente (solo para la biblioteca)
-        // Esto no es elegante pero funciona si no puedes modificar la biblioteca
-        freopen("/dev/null", "w", stderr);
+        suprimir_debug_biblioteca();
     } else {
         set_verbose(1);
     }
@@ -158,14 +163,14 @@ int main(int argc, char **argv) {
     dir_sim[sizeof(dir_sim) - 1] = '\0';
     asegurar_barra_final(dir_sim);
 
-    if (verbose >= 1) printf("Montando dispositivo %s...\n", argv[1]);
+    if (!modo_silencioso) printf("Montando dispositivo %s...\n", argv[1]);
     
     if (bmount(argv[1]) == FALLO) {
         fprintf(stderr, "Error al montar el dispositivo\n");
         return FALLO;
     }
 
-    if (verbose >= 1) printf("dir_sim: %s\n", dir_sim);
+    if (!modo_silencioso) printf("dir_sim: %s\n", dir_sim);
 
     struct STAT stat_dir;
     if (mi_stat(dir_sim, &stat_dir) == FALLO) {
@@ -176,7 +181,7 @@ int main(int argc, char **argv) {
 
     unsigned int numentradas = stat_dir.tamEnBytesLog / sizeof(struct entrada);
     
-    if (verbose >= 1) {
+    if (!modo_silencioso) {
         printf("numentradas: %u NUMPROCESOS: %d\n", numentradas, NUMPROCESOS);
     }
 
@@ -204,14 +209,14 @@ int main(int argc, char **argv) {
         unsigned int off_entrada = i * sizeof(struct entrada);
 
         if (mi_read(dir_sim, &ent, off_entrada, sizeof(struct entrada)) != (int)sizeof(struct entrada)) {
-            fprintf(stderr, "Error al leer la entrada %u del directorio de simulacion\n", i);
+            if (!modo_silencioso) fprintf(stderr, "Error al leer la entrada %u del directorio de simulacion\n", i);
             errores++;
             continue;
         }
 
         int pid_proceso;
         if (extraer_pid_nombre(ent.nombre, &pid_proceso) == FALLO) {
-            if (verbose >= 2) fprintf(stderr, "Omitiendo entrada inválida: %s\n", ent.nombre);
+            if (!modo_silencioso && verbose >= 2) fprintf(stderr, "Omitiendo entrada inválida: %s\n", ent.nombre);
             continue;
         }
 
@@ -220,7 +225,7 @@ int main(int argc, char **argv) {
 
         struct STAT stat_fichero;
         if (mi_stat(camino_prueba, &stat_fichero) == FALLO) {
-            fprintf(stderr, "Error al obtener stat de %s\n", camino_prueba);
+            if (!modo_silencioso) fprintf(stderr, "Error al obtener stat de %s\n", camino_prueba);
             errores++;
             continue;
         }
@@ -231,8 +236,6 @@ int main(int argc, char **argv) {
         unsigned int offset = 0;
         struct REGISTRO buffer[BUFFER_REGISTROS];
 
-        if (verbose >= 2) printf("Procesando PID %d, tamaño archivo: %u bytes\n", pid_proceso, tam_logico);
-
         while (offset < tam_logico) {
             unsigned int bytes_a_leer = sizeof(buffer);
             if (tam_logico - offset < bytes_a_leer) {
@@ -241,7 +244,7 @@ int main(int argc, char **argv) {
 
             int leidos = mi_read(camino_prueba, buffer, offset, bytes_a_leer);
             if (leidos < 0) {
-                fprintf(stderr, "Error al leer %s (offset=%u)\n", camino_prueba, offset);
+                if (!modo_silencioso) fprintf(stderr, "Error al leer %s (offset=%u)\n", camino_prueba, offset);
                 errores++;
                 break;
             }
@@ -263,43 +266,17 @@ int main(int argc, char **argv) {
 
         procesos_procesados++;
 
-        if (verbose >= 1) {
-            printf("PID: %d\n", info.pid);
-            printf("Numero de escrituras: %u\n", info.nEscrituras);
-
-            char fecha[64];
-            formatear_fecha(info.PrimeraEscritura.fecha, fecha, sizeof(fecha));
-            printf("Primera Escritura\t %d\t %d\t %s\n",
-                   info.PrimeraEscritura.nEscritura,
-                   info.PrimeraEscritura.nRegistro,
-                   fecha);
-
-            formatear_fecha(info.UltimaEscritura.fecha, fecha, sizeof(fecha));
-            printf("Ultima Escritura\t %d\t %d\t %s\n",
-                   info.UltimaEscritura.nEscritura,
-                   info.UltimaEscritura.nRegistro,
-                   fecha);
-
-            formatear_fecha(info.MenorPosicion.fecha, fecha, sizeof(fecha));
-            printf("Menor Posicion\t %d\t %d\t %s\n",
-                   info.MenorPosicion.nEscritura,
-                   info.MenorPosicion.nRegistro,
-                   fecha);
-
-            formatear_fecha(info.MayorPosicion.fecha, fecha, sizeof(fecha));
-            printf("Mayor Posicion\t %d\t %d\t %s\n\n",
-                   info.MayorPosicion.nEscritura,
-                   info.MayorPosicion.nRegistro,
-                   fecha);
-        }
+        // Mostrar cuando se completa un proceso (igual que simulacion)
+        printf("[Proceso %d: Completadas %u escrituras en %s]\n", 
+               info.pid, info.nEscrituras, camino_prueba);
 
         if (escribir_informe_proceso(informe_path, &offset_informe, &info) == FALLO) {
-            fprintf(stderr, "Error al escribir el informe del proceso %d\n", pid_proceso);
+            if (!modo_silencioso) fprintf(stderr, "Error al escribir el informe del proceso %d\n", pid_proceso);
             errores++;
         }
     }
 
-    if (verbose >= 1) {
+    if (!modo_silencioso) {
         printf("\n--- Resumen ---\n");
         printf("Procesos procesados: %d\n", procesos_procesados);
         printf("Errores: %d\n", errores);

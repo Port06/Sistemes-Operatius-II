@@ -14,7 +14,7 @@
 
 #include <signal.h>
 
-#define DEBUG 1   // poner a 0 para la entrega final
+#define DEBUG 0   // poner a 0 para la entrega final
 
 int acabados = 0;
 

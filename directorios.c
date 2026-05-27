@@ -280,66 +280,118 @@ int mi_read(const char *camino, void *buf, unsigned int offset, unsigned int nby
     return mi_read_f(p_inodo, buf, offset, nbytes);
 }
 
-int mi_link(const char *camino1, const char *camino2){
-	mi_waitSem();
+int mi_link(const char *camino1, const char *camino2) {
+
+    mi_waitSem();
+
     unsigned int p_inodo_dir1 = 0;
     unsigned int p_inodo1;
     unsigned int p_entrada1;
+
     unsigned int p_inodo_dir2 = 0;
-    unsigned int p_inodo2;   
+    unsigned int p_inodo2;
     unsigned int p_entrada2;
 
     // Obtener el numero de inodo del camino1
-    int error = buscar_entrada(camino1, &p_inodo_dir1, &p_inodo1, &p_entrada1, 0, 0);
+    int error = buscar_entrada(camino1,
+                               &p_inodo_dir1,
+                               &p_inodo1,
+                               &p_entrada1,
+                               0,
+                               0);
+
     if (error < 0) {
-		mi_signalSem();
-		return error;
-	}
+        mi_signalSem();
+        return error;
+    }
+
     // Comprobar que tiene permisos de lectura
     struct inodo inodo1;
-    leer_inodo(p_inodo1, &inodo1);
-    if (!(inodo1.permisos & 4)) {
-		mi_signalSem();
-		return ERROR_PERMISO_LECTURA;
-	}
-    
-    // Camino 1 y camino 2 deben referirse a ficheros
-    // No se permite el enlace a directorios para evitar que se creen ciclos en el grafo.
-    if (inodo1.tipo != 'f') {
-		mi_signalSem();
-		return FALLO;
-	}
 
-    // La entrada del camino2 no debe existir, la hemos de crear con buscar_entrada con reservar = 1 y permisos 6 (lectura y escritura)
-    error = buscar_entrada(camino2, &p_inodo_dir2, &p_inodo2, &p_entrada2, 1, 6);
-    if (error < 0) {
-		mi_signalSem();
-		return error;
-	}
-
-    // Leemos la entrada creada de camino2, o sea la entrada p_entrada2 de p_inodo_dir2
-    struct entrada entrada;
-    mi_read_f(p_inodo_dir2, &entrada, p_entrada2 * sizeof(struct entrada), sizeof(struct entrada));
-
-    // Creamos el enlace, asociamos a esta entrada el mismo inodo que al asociado a la entrada del camino1, es decir p_inodo1
-    entrada.ninodo = p_inodo1;
-
-    // Escribimos la entrada modificada en p_inodo_dir2
-    if (mi_write_f(p_inodo_dir2, &entrada, p_entrada2 * sizeof(struct entrada), sizeof(struct entrada)) == FALLO) {
-        liberar_inodo(entrada.ninodo); // Liberar el inodo creado para camino2
-		mi_signalSem();
+    if (leer_inodo(p_inodo1, &inodo1) == FALLO) {
+        mi_signalSem();
         return FALLO;
     }
 
-    // Liberamos el inodo que se ha asociado a la entrada creada, p_inodo2.
-    liberar_inodo(p_inodo2);
+    if (!(inodo1.permisos & 4)) {
+        mi_signalSem();
+        return ERROR_PERMISO_LECTURA;
+    }
 
-    // Incrementamos la cantidad de enlaces (nlinks) de p_inodo1, actualizamos el ctime y lo salvamos.
+    // Camino1 y camino2 deben referirse a ficheros
+    // No se permite el enlace a directorios para evitar ciclos
+    if (inodo1.tipo != 'f') {
+        mi_signalSem();
+        return FALLO;
+    }
+
+    // La entrada camino2 NO debe existir
+    // buscar_entrada() la crea con reservar = 1
+    error = buscar_entrada(camino2,
+                           &p_inodo_dir2,
+                           &p_inodo2,
+                           &p_entrada2,
+                           1,
+                           6);
+
+    if (error < 0) {
+        mi_signalSem();
+        return error;
+    }
+
+    // Leemos la entrada creada de camino2
+    // (entrada numero p_entrada2 dentro de p_inodo_dir2)
+    struct entrada entrada;
+
+    if (mi_read_f(p_inodo_dir2,
+                  &entrada,
+                  p_entrada2 * sizeof(struct entrada),
+                  sizeof(struct entrada)) == FALLO) {
+
+        // Liberar el inodo reservado para camino2
+        liberar_inodo(p_inodo2);
+
+        mi_signalSem();
+        return FALLO;
+    }
+
+    // Asociamos la nueva entrada al mismo inodo que camino1
+    entrada.ninodo = p_inodo1;
+
+    // Escribimos la entrada modificada
+    if (mi_write_f(p_inodo_dir2,
+                   &entrada,
+                   p_entrada2 * sizeof(struct entrada),
+                   sizeof(struct entrada)) == FALLO) {
+
+        // Liberar el inodo reservado inicialmente para camino2
+        liberar_inodo(p_inodo2);
+
+        mi_signalSem();
+        return FALLO;
+    }
+
+    // Liberamos el inodo que se habia reservado para camino2
+    // porque ahora ambas entradas apuntan a p_inodo1
+    if (liberar_inodo(p_inodo2) == FALLO) {
+        mi_signalSem();
+        return FALLO;
+    }
+
+    // Incrementamos el numero de enlaces del inodo original
     inodo1.nlinks++;
-    inodo1.ctime = time(NULL);
-    escribir_inodo(p_inodo1, &inodo1);
 
-	mi_signalSem();
+    // Actualizamos ctime
+    inodo1.ctime = time(NULL);
+
+    // Guardamos el inodo actualizado
+    if (escribir_inodo(p_inodo1, &inodo1) == FALLO) {
+        mi_signalSem();
+        return FALLO;
+    }
+
+    mi_signalSem();
+
     return EXITO;
 }
 

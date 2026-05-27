@@ -40,11 +40,17 @@ int main(int argc, char *argv[]) {
 
     memset(buffer, 0, TAMBUFFER);
     while ((leidos = mi_read(camino, buffer, offset, TAMBUFFER)) > 0) {
-        write(1, buffer, leidos);
-        offset += leidos;
-        total_leidos += leidos;
-        memset(buffer, 0, TAMBUFFER);
-    }
+		write(1, buffer, leidos);
+		offset += leidos;
+		total_leidos += leidos;
+		memset(buffer, 0, TAMBUFFER);
+	}
+
+	if (leidos < 0) {
+		fprintf(stderr, "Error al leer el fichero\n");
+		bumount();
+		exit(EXIT_FAILURE);
+	}
 
     fprintf(stderr, "\nTotal leídos: %u bytes\n", total_leidos);
 
