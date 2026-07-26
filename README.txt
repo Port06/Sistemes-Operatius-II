@@ -1,14 +1,20 @@
-	ENTREGA 1
------------------------------------------
-Miembros: - Loan Besnardeau Logeais
-	  - Joan Tenerife Perelló
-	  - Joan Matemalas Rosselló
------------------------------------------
+	SISTEMA DE FICHERO ext2 SIMPLIFICADO
 
-	IA:
-	-Retocar el unlink perque aquest no acabava de donar els valors esperats
-	-Per fer quadrar els atime, mtime, ctime amb els formats corresponents
+	Este es un proyecto de gran magnitud que permite mediante terminal de linux gestionar ficheros, directorios
+	asi como sus características y permisos de tipo 'ugo'. Esta implementación sigue la lógica modular del sistema
+	ext2. Eso significa que incluye mapa de bits, bloques, las funciones auxiliares, semáforos y el código de 
+	verificación correspondente.
+	
+	-----------------------------------------
+	Miembros: - Loan Besnardeau Logeais
+		 	  - Joan Tenerife Perelló
+	 		  - Joan Matemalas Rosselló
+	-----------------------------------------
 
-	Funcions voluntaries al scripte2.sh:
-	-Mover
-	-Renonbrar
+	TAREAS REALIZADAS CON AYUDA DE IA EN EL PROYECTO:
+	- Revision del unlink ya que no daba los valores esperados tras realizar tests
+	- Ajustar el formato de atime, mtime, ctime
+
+	FUNCIONES ADICIONALES DEL scripte2.sh: (funcionalidades basicas extras)
+	- Mover
+	- Renonbrar
